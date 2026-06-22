@@ -2,7 +2,6 @@
 // Bottom tab bar — 4 tabs: Home, Schedule, Announcements, Profile
 
 import { NavLink } from 'react-router-dom'
-import { useUnreadAnnouncements } from '../hooks/useUnreadAnnouncements'
 import './Navbar.css'
 
 function NavItem({ to, label, icon, iconActive, hasBadge }) {
@@ -43,15 +42,12 @@ const icons = {
 }
 
 export default function Navbar() {
-  const { hasUnread } = useUnreadAnnouncements()
-
   return (
     <nav className="navbar">
       <div className="navbar__inner">
         <NavItem to="/dashboard" label="Home" icon={icons.home} iconActive={icons.homeActive} />
         <NavItem to="/navigation" label="Map" icon={icons.navigation} iconActive={icons.navigationActive} />
         <NavItem to="/schedule" label="Schedule" icon={icons.schedule} iconActive={icons.scheduleActive} />
-        <NavItem to="/announcements" label="Updates" icon={icons.announcements} iconActive={icons.announcementsActive} hasBadge={hasUnread} />
         <NavItem to="/about" label="About" icon={icons.about} iconActive={icons.aboutActive} />
         <NavItem to="/profile" label="Profile" icon={icons.profile} iconActive={icons.profileActive} />
       </div>

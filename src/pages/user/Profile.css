@@ -51,7 +51,7 @@
 .profile-card {
   background: var(--color-bg-card);
   border: none;
-  border-radius: var(--r-xl);
+  border-radius: 20px;
   box-shadow: var(--shadow-soft);
   overflow: hidden;
 }

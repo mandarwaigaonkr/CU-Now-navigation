@@ -14,7 +14,6 @@ import { Analytics } from '@vercel/analytics/react'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import InstallBanner from './components/InstallBanner'
-import FeedbackPopup from './components/FeedbackPopup'
 import Layout from './components/Layout'
 
 // Loading spinner
@@ -125,8 +124,6 @@ export default function App() {
         </Routes>
         </Suspense>
 
-        {/* Global Feedback Popup */}
-        <FeedbackPopup />
 
         {/* Global PWA Install Banner */}
         <InstallBanner />
