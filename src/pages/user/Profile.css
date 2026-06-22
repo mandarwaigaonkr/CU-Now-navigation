@@ -1,0 +1,346 @@
+/* src/pages/user/Profile.css */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-bg-base-solid);
+}
+
+.profile-header {
+  flex-shrink: 0;
+  background: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-bg-border);
+}
+
+.profile-header__inner {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 14px 16px;
+}
+
+.profile-header__title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.profile-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-content > * {
+  flex-shrink: 0;
+}
+
+/* Cards */
+.profile-card {
+  background: var(--color-bg-card);
+  border: none;
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.profile-section-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px 6px;
+}
+
+/* User card */
+.profile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+}
+
+.profile-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.profile-avatar--placeholder {
+  background: var(--color-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profile-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-email {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: var(--color-accent-dim);
+  color: var(--color-accent);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.profile-guest-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.dark .profile-guest-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+}
+
+/* Detail rows */
+.profile-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 8px;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+}
+
+.profile-row:last-child {
+  padding-bottom: 12px;
+}
+
+.profile-row__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: var(--color-bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.profile-row__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-row__label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.profile-row__value {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Admin panel button */
+.admin-panel-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-bg-border);
+  background: var(--color-bg-card);
+  cursor: pointer;
+  transition: all 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-panel-btn:active {
+  transform: scale(0.98);
+}
+
+.admin-panel-btn__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  background: var(--color-accent-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.admin-panel-btn__text {
+  flex: 1;
+  text-align: left;
+}
+
+.admin-panel-btn__title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.admin-panel-btn__sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.admin-panel-btn svg:last-child {
+  color: var(--color-text-muted);
+}
+
+/* Settings */
+.profile-setting {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.profile-setting:first-of-type {
+  margin-top: 4px;
+}
+
+.profile-setting:last-of-type {
+  margin-bottom: 8px;
+}
+
+.profile-setting:active {
+  background: var(--color-bg-elevated);
+}
+
+.profile-setting__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: var(--color-bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.profile-setting__icon--danger {
+  background: rgba(220, 38, 38, 0.06);
+  color: var(--color-danger);
+}
+
+.profile-setting__label {
+  flex: 1;
+  text-align: left;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+.profile-setting__label--danger {
+  flex: 1;
+  text-align: left;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--color-danger);
+}
+
+/* Theme toggle */
+.theme-toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 100px;
+  background: var(--color-bg-border);
+  position: relative;
+  transition: background 200ms ease;
+}
+
+.theme-toggle--dark {
+  background: var(--color-accent);
+}
+
+.theme-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform 200ms ease;
+}
+
+.theme-toggle--dark .theme-toggle__knob {
+  transform: translateX(18px);
+}
+
+/* Version */
+.profile-version {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  padding: 8px 0;
+}
