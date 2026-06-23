@@ -11,7 +11,7 @@ import ConfirmModal from '../../components/ConfirmModal'
 import './Admin.css'
 import { AppEvent } from '../../context/EventsContext'
 
-const DAY_LABELS = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6']
+
 
 interface PendingAdmin {
   id: string;
@@ -178,19 +178,26 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Events by Day */}
+        {/* Events by Date */}
         {loading ? (
           <div className="admin-skeleton">
             {[1, 2, 3].map(i => <div key={i} className="skeleton-card" />)}
           </div>
         ) : (
-          DAY_LABELS.map((label, i) => {
-            const day = i + 1
-            const dayEvents = events.filter(e => e.dayNumber === day)
-            if (dayEvents.length === 0) return null
-            return (
-              <div key={day} className="admin-day-group">
-                <h3 className="admin-day-title">{label}</h3>
+          (() => {
+            if (events.length === 0) return <p style={{textAlign: 'center', color: 'var(--color-text-muted)', marginTop: '20px'}}>No events found.</p>;
+            
+            const groups: Record<string, AppEvent[]> = {};
+            events.forEach(e => {
+              const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime as any);
+              const dateStr = start.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+              if (!groups[dateStr]) groups[dateStr] = [];
+              groups[dateStr].push(e);
+            });
+
+            return Object.entries(groups).map(([dateLabel, dayEvents]) => (
+              <div key={dateLabel} className="admin-day-group">
+                <h3 className="admin-day-title">{dateLabel}</h3>
                 <div className="admin-event-list">
                   {dayEvents.map(event => (
                     <div key={event.id} className="admin-event-card">
@@ -200,7 +207,7 @@ export default function AdminDashboard() {
                         </span>
                         <h4 className="admin-event-name">{event.name}</h4>
                         <p className="admin-event-meta">
-                          {formatTime(event.startTime)} – {formatTime(event.endTime)} · {event.venue}
+                          {formatTime(event.startTime as any)} – {formatTime(event.endTime as any)} · {event.venue}
                         </p>
                       </div>
                       <div className="admin-event-actions">
@@ -215,8 +222,8 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               </div>
-            )
-          })
+            ))
+          })()
         )}
       </div>
 

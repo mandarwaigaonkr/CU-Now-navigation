@@ -124,15 +124,7 @@ export default function CreateEvent() {
 
       <div className="admin-content">
         <form onSubmit={handleSubmit} className="admin-form">
-          {/* Day Number */}
-          <div className="form-group">
-            <label className="form-label">Day Number *</label>
-            <CustomDayPicker 
-              name="dayNumber" 
-              value={form.dayNumber} 
-              onChange={handleChange} 
-            />
-          </div>
+
 
           {/* Event Name */}
           <div className="form-group">
