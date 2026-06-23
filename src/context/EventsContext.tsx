@@ -1,25 +1,47 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { collection, query, orderBy, onSnapshot, where } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from './AuthContext'
 
-const EventsContext = createContext(null)
+export interface AppEvent {
+  id: string;
+  startTime?: any;
+  targetGroup?: number | 'all';
+  name?: string;
+  venue?: string;
+  venueDirections?: string;
+  directions?: string;
+  description?: string;
+  status?: string;
+  [key: string]: any;
+}
 
-export function useEvents() {
+export interface EventsContextType {
+  events: AppEvent[];
+  loading: boolean;
+}
+
+const EventsContext = createContext<EventsContextType | null>(null)
+
+export function useEvents(): EventsContextType {
   const context = useContext(EventsContext)
   if (!context) throw new Error('useEvents must be used within an EventsProvider')
   return context
 }
 
-export default function EventsProvider({ children }) {
-  const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
+interface EventsProviderProps {
+  children: ReactNode;
+}
+
+export default function EventsProvider({ children }: EventsProviderProps) {
+  const [events, setEvents] = useState<AppEvent[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
   const { profile, isAdmin, loading: authLoading } = useAuth()
 
   useEffect(() => {
     if (authLoading) return
 
-    let q;
+    let q: any;
 
     if (isAdmin) {
       q = query(collection(db, 'events'), orderBy('startTime', 'asc'))
@@ -35,8 +57,8 @@ export default function EventsProvider({ children }) {
       return
     }
 
-    const unsub = onSnapshot(q, (snap) => {
-      setEvents(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+    const unsub = onSnapshot(q, (snap: any) => {
+      setEvents(snap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as AppEvent)))
       setLoading(false)
     })
     

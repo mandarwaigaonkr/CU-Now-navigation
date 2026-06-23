@@ -1,14 +1,21 @@
 import { useState, useRef, useEffect } from 'react'
 import './CustomInputs.css'
 
-export default function CustomDatePicker({ name, value, onChange, error }) {
+interface CustomDatePickerProps {
+  name: string;
+  value: string;
+  onChange: (e: { target: { name: string; value: string } }) => void;
+  error?: boolean;
+}
+
+export default function CustomDatePicker({ name, value, onChange, error }: CustomDatePickerProps) {
   const [open, setOpen] = useState(false)
   const [viewDate, setViewDate] = useState(value ? new Date(value) : new Date())
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false)
       }
     }
@@ -30,21 +37,21 @@ export default function CustomDatePicker({ name, value, onChange, error }) {
     ? new Date(value).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
     : 'Select Date'
 
-  const handleDayClick = (day) => {
+  const handleDayClick = (day: number) => {
     const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day)
     const offset = newDate.getTimezoneOffset()
-    const formatted = new Date(newDate.getTime() - (offset*60*1000)).toISOString().split('T')[0]
+    const formatted = new Date(newDate.getTime() - (offset * 60 * 1000)).toISOString().split('T')[0]
     
     onChange({ target: { name, value: formatted } })
     setOpen(false)
   }
 
-  const prevMonth = (e) => {
+  const prevMonth = (e: React.MouseEvent) => {
     e.stopPropagation()
     setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))
   }
 
-  const nextMonth = (e) => {
+  const nextMonth = (e: React.MouseEvent) => {
     e.stopPropagation()
     setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))
   }
@@ -55,7 +62,7 @@ export default function CustomDatePicker({ name, value, onChange, error }) {
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   const firstDayOfMonth = new Date(year, month, 1).getDay()
   
-  const days = []
+  const days: (number | null)[] = []
   for (let i = 0; i < firstDayOfMonth; i++) {
     days.push(null)
   }
@@ -65,13 +72,13 @@ export default function CustomDatePicker({ name, value, onChange, error }) {
 
   const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
-  const isSelected = (day) => {
+  const isSelected = (day: number | null) => {
     if (!value || !day) return false
     const d = new Date(value)
     return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year
   }
 
-  const isToday = (day) => {
+  const isToday = (day: number | null) => {
     if (!day) return false
     const today = new Date()
     return today.getDate() === day && today.getMonth() === month && today.getFullYear() === year

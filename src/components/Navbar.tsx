@@ -1,10 +1,18 @@
-// src/components/Navbar.jsx
+// src/components/Navbar.tsx
 // Bottom tab bar — 4 tabs: Home, Schedule, Announcements, Profile
 
 import { NavLink } from 'react-router-dom'
 import './Navbar.css'
 
-function NavItem({ to, label, icon, iconActive, hasBadge }) {
+interface NavItemProps {
+  to: string;
+  label: string;
+  icon: string;
+  iconActive: string;
+  hasBadge?: boolean;
+}
+
+function NavItem({ to, label, icon, iconActive, hasBadge }: NavItemProps) {
   return (
     <NavLink
       to={to}

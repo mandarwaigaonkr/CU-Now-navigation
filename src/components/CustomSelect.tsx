@@ -1,17 +1,27 @@
-// src/components/CustomSelect.jsx
-// Generic custom dropdown for any select field — works in both light and dark mode
-
 import { useState, useRef, useEffect } from 'react'
 import './CustomSelect.css'
 
-export default function CustomSelect({ value, options, onChange, error, placeholder = 'Select an option' }) {
+export interface SelectOption {
+  label: string;
+  value: any;
+}
+
+interface CustomSelectProps {
+  value: any;
+  options: SelectOption[];
+  onChange: (val: any) => void;
+  error?: boolean;
+  placeholder?: string;
+}
+
+export default function CustomSelect({ value, options, onChange, error, placeholder = 'Select an option' }: CustomSelectProps) {
   const [open, setOpen] = useState(false)
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   // Close on outside click
   useEffect(() => {
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false)
       }
     }
@@ -21,7 +31,7 @@ export default function CustomSelect({ value, options, onChange, error, placehol
     }
   }, [open])
 
-  function handleSelect(val) {
+  function handleSelect(val: any) {
     onChange(val)
     setOpen(false)
   }

@@ -1,9 +1,16 @@
-// src/components/VenueDirections.jsx
+// src/components/VenueDirections.tsx
 // Bottom-sheet modal showing venue image and directions
 
 import './VenueDirections.css'
+import { Venue } from '../data/venues'
 
-export default function VenueDirections({ venue, directions, onClose }) {
+interface VenueDirectionsProps {
+  venue: Venue | null;
+  directions?: string | null;
+  onClose: () => void;
+}
+
+export default function VenueDirections({ venue, directions, onClose }: VenueDirectionsProps) {
   if (!venue) return null
 
   // Use custom admin-provided directions, or fall back to default

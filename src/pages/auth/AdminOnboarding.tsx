@@ -1,7 +1,7 @@
-// src/pages/auth/AdminOnboarding.jsx
+// src/pages/auth/AdminOnboarding.tsx
 // Admin request/onboarding flow
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signOut } from 'firebase/auth'
@@ -19,7 +19,7 @@ export default function AdminOnboarding() {
     organization: profile?.organization || '',
     adminRequestReason: profile?.adminRequestReason || '',
   })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
 
   if (!user) return <Navigate to="/login" replace />
@@ -71,15 +71,16 @@ export default function AdminOnboarding() {
     )
   }
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
     setErrors(prev => ({ ...prev, [name]: '' }))
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const validationErrors = {}
+    if (!user) return;
+    const validationErrors: Record<string, string> = {}
     if (!form.designation.trim()) validationErrors.designation = 'Designation is required'
     if (!form.organization.trim()) validationErrors.organization = 'Organization is required'
     if (!form.adminRequestReason.trim()) validationErrors.adminRequestReason = 'Please explain why'

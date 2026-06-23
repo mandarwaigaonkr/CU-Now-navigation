@@ -1,8 +1,16 @@
-// src/data/venues.js
+// src/data/venues.ts
 // Static venue registry — maps venue names to blocks, images, and default directions.
 // Images are served from public/venues/ to avoid Firebase Storage costs.
 
-const VENUES = [
+export interface Venue {
+  id: string;
+  name: string;
+  block: string;
+  image: string;
+  defaultDirections: string;
+}
+
+const VENUES: Venue[] = [
   // ─── Centre of Excellence (5th Block) ───
   {
     id: 'coe-frontier-material-lab',
@@ -116,7 +124,7 @@ const VENUES = [
  * Find venue data by matching the event's venue string (case-insensitive).
  * Returns the venue object or null if not found.
  */
-export function getVenueByName(venueName) {
+export function getVenueByName(venueName?: string | null): Venue | null {
   if (!venueName) return null
   const lower = venueName.toLowerCase().trim()
   return VENUES.find(v => v.name.toLowerCase() === lower) || null
@@ -126,7 +134,7 @@ export function getVenueByName(venueName) {
 export const VENUE_LIST = VENUES.map(v => v.name)
 
 /** Get default directions for a venue name (for admin copy feature) */
-export function getDefaultDirections(venueName) {
+export function getDefaultDirections(venueName?: string | null): string {
   const venue = getVenueByName(venueName)
   return venue?.defaultDirections || ''
 }

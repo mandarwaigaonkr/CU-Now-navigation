@@ -1,34 +1,45 @@
-// src/pages/admin/AdminDashboard.jsx
+// src/pages/admin/AdminDashboard.tsx
 // Admin dashboard — list events, quick stats, manage
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { collection, query, orderBy, onSnapshot, doc, deleteDoc, updateDoc, where, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
-import { formatTime, timeAgo } from '../../utils/formatters'
+import { formatTime } from '../../utils/formatters'
 import Navbar from '../../components/Navbar'
 import ConfirmModal from '../../components/ConfirmModal'
 import './Admin.css'
+import { AppEvent } from '../../context/EventsContext'
 
 const DAY_LABELS = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6']
 
+interface PendingAdmin {
+  id: string;
+  name?: string;
+  email?: string;
+  photoURL?: string;
+  designation?: string;
+  organization?: string;
+  adminRequestReason?: string;
+}
+
 export default function AdminDashboard() {
   const navigate = useNavigate()
-  const [events, setEvents] = useState([])
-  const [pendingAdmins, setPendingAdmins] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [deleteTarget, setDeleteTarget] = useState(null)
+  const [events, setEvents] = useState<AppEvent[]>([])
+  const [pendingAdmins, setPendingAdmins] = useState<PendingAdmin[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [deleteTarget, setDeleteTarget] = useState<(AppEvent & { type?: string }) | null>(null)
 
   useEffect(() => {
     const q1 = query(collection(db, 'events'), orderBy('dayNumber', 'asc'), orderBy('startTime', 'asc'))
     const unsub1 = onSnapshot(q1, snap => {
-      setEvents(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+      setEvents(snap.docs.map(d => ({ id: d.id, ...d.data() } as AppEvent)))
       setLoading(false)
     })
     // Listen for pending admin requests
     const q3 = query(collection(db, 'users'), where('adminStatus', '==', 'pending'))
     const unsub3 = onSnapshot(q3, snap => {
-      setPendingAdmins(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+      setPendingAdmins(snap.docs.map(d => ({ id: d.id, ...d.data() } as PendingAdmin)))
     })
     return () => { unsub1(); unsub3() }
   }, [])
@@ -48,7 +59,7 @@ export default function AdminDashboard() {
     }
   }
 
-  async function handleApproveAdmin(userId) {
+  async function handleApproveAdmin(userId: string) {
     try {
       await updateDoc(doc(db, 'users', userId), {
         role: 'admin',
@@ -62,7 +73,7 @@ export default function AdminDashboard() {
     }
   }
 
-  async function handleRejectAdmin(userId) {
+  async function handleRejectAdmin(userId: string) {
     try {
       await updateDoc(doc(db, 'users', userId), {
         adminStatus: 'rejected',

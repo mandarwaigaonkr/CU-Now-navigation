@@ -1,32 +1,36 @@
-// src/pages/user/Schedule.jsx
+// src/pages/user/Schedule.tsx
 // Schedule page — Today's events and Upcoming events
 
 import { useState, useMemo } from 'react'
-import { useAuth } from '../../hooks/useAuth'
-import { useEvents } from '../../context/EventsContext'
+import { useEvents, AppEvent } from '../../context/EventsContext'
 import { formatTime } from '../../utils/formatters'
-import { getVenueByName } from '../../data/venues'
+import { getVenueByName, Venue } from '../../data/venues'
 import VenueDirections from '../../components/VenueDirections'
 import './Schedule.css'
 
+interface VenueModalState {
+  venue: Venue | null;
+  directions: string;
+}
+
 export default function Schedule() {
   const { events, loading } = useEvents()
-  const [activeTab, setActiveTab] = useState('today') // 'today' | 'upcoming'
-  const [expandedId, setExpandedId] = useState(null)
-  const [venueModal, setVenueModal] = useState(null) // { venue, directions }
+  const [activeTab, setActiveTab] = useState<'today' | 'upcoming'>('today')
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [venueModal, setVenueModal] = useState<VenueModalState | null>(null)
 
   const { todayEvents, upcomingEvents } = useMemo(() => {
     const now = new Date()
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
     const tomorrowStart = todayStart + 24 * 60 * 60 * 1000
 
-    const today = []
-    const upcoming = []
+    const today: AppEvent[] = []
+    const upcoming: AppEvent[] = []
 
     events.forEach(e => {
       if (e.status !== 'active') return
       
-      const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime)
+      const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime as any)
       const startTimeMs = start.getTime()
 
       if (startTimeMs >= todayStart && startTimeMs < tomorrowStart) {
@@ -37,9 +41,9 @@ export default function Schedule() {
     })
 
     // Sort by start time ascending
-    const sortFn = (a, b) => {
-      const aStart = a.startTime?.toDate ? a.startTime.toDate().getTime() : new Date(a.startTime).getTime()
-      const bStart = b.startTime?.toDate ? b.startTime.toDate().getTime() : new Date(b.startTime).getTime()
+    const sortFn = (a: AppEvent, b: AppEvent) => {
+      const aStart = a.startTime?.toDate ? a.startTime.toDate().getTime() : new Date(a.startTime as any).getTime()
+      const bStart = b.startTime?.toDate ? b.startTime.toDate().getTime() : new Date(b.startTime as any).getTime()
       return aStart - bStart
     }
 
@@ -51,14 +55,14 @@ export default function Schedule() {
 
   const displayedEvents = activeTab === 'today' ? todayEvents : upcomingEvents
 
-  function toggleExpand(id) {
+  function toggleExpand(id: string) {
     setExpandedId(prev => prev === id ? null : id)
   }
 
-  function getStatusBadge(event) {
+  function getStatusBadge(event: AppEvent) {
     const now = new Date()
-    const start = event.startTime?.toDate ? event.startTime.toDate() : new Date(event.startTime)
-    const end = event.endTime?.toDate ? event.endTime.toDate() : new Date(event.endTime)
+    const start = event.startTime?.toDate ? event.startTime.toDate() : new Date(event.startTime as any)
+    const end = event.endTime?.toDate ? event.endTime.toDate() : new Date(event.endTime as any)
 
     if (now >= start && now <= end) return { label: 'LIVE', type: 'live' }
     if (now > end) return { label: 'Done', type: 'done' }
@@ -133,7 +137,7 @@ export default function Schedule() {
                 <div
                   key={event.id}
                   className={`schedule-card ${isExpanded ? 'schedule-card--expanded' : ''}`}
-                  onClick={() => toggleExpand(event.id)}
+                  onClick={() => toggleExpand(event.id!)}
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
                   {/* Timeline dot */}
@@ -150,12 +154,12 @@ export default function Schedule() {
                           <span style={{ marginRight: '8px', color: 'var(--color-text-secondary)' }}>
                             {event.startTime?.toDate 
                               ? event.startTime.toDate().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-                              : new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                              : new Date(event.startTime as any).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                             {' · '}
                           </span>
                         )}
-                        {formatTime(event.startTime)}
-                        {event.endTime && ` – ${formatTime(event.endTime)}`}
+                        {formatTime(event.startTime as any)}
+                        {event.endTime && ` – ${formatTime(event.endTime as any)}`}
                       </div>
                       {badge && (
                         <span className={`schedule-badge schedule-badge--${badge.type}`}>
@@ -189,14 +193,14 @@ export default function Schedule() {
                         <p className="schedule-detail__text">
                           {event.startTime?.toDate 
                             ? event.startTime.toDate().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })
-                            : new Date(event.startTime).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })}
+                            : new Date(event.startTime as any).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })}
                           <br />
-                          {formatTime(event.startTime)} – {formatTime(event.endTime)}
+                          {formatTime(event.startTime as any)} – {formatTime(event.endTime as any)}
                         </p>
                       </div>
                       {/* Get Directions button */}
                       {(() => {
-                        const venueData = getVenueByName(event.venue)
+                        const venueData = getVenueByName(event.venue || '')
                         if (!venueData) return null
                         return (
                           <button

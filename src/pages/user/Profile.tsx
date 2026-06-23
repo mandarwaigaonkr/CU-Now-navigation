@@ -1,4 +1,4 @@
-// src/pages/user/Profile.jsx
+// src/pages/user/Profile.tsx
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
@@ -27,7 +27,7 @@ export default function Profile() {
   const isGuest = profile?.role === 'guest'
 
   // Friendly role label
-  function getRoleLabel(role) {
+  function getRoleLabel(role: string | undefined | null) {
     switch (role) {
       case 'guest': return 'Guest'
       case 'admin': return 'Admin'
@@ -167,7 +167,7 @@ export default function Profile() {
   )
 }
 
-function ProfileRow({ icon, label, value }) {
+function ProfileRow({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) {
   return (
     <div className="profile-row">
       <div className="profile-row__icon">{icon}</div>

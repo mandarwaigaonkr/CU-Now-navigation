@@ -1,11 +1,10 @@
-// src/pages/admin/CreateEvent.jsx
-// Admin form to create a new orientation event
+// src/pages/admin/EditEvent.tsx
+// Admin form to edit an existing event
 
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { doc, getDoc, updateDoc, serverTimestamp, Timestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
-import { useAuth } from '../../hooks/useAuth'
 import { VENUE_LIST, getDefaultDirections } from '../../data/venues'
 import Navbar from '../../components/Navbar'
 import CustomDayPicker from '../../components/CustomDayPicker'
@@ -14,11 +13,23 @@ import CustomTimePicker from '../../components/CustomTimePicker'
 import CustomSelect from '../../components/CustomSelect'
 import './Admin.css'
 
-export default function CreateEvent() {
-  const navigate = useNavigate()
-  const { user } = useAuth()
+interface EventForm {
+  dayNumber: string;
+  name: string;
+  venue: string;
+  venueDirections: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  description: string;
+  status: string;
+}
 
-  const [form, setForm] = useState({
+export default function EditEvent() {
+  const navigate = useNavigate()
+  const { eventId } = useParams<{ eventId: string }>()
+
+  const [form, setForm] = useState<EventForm>({
     dayNumber: '1',
     name: '',
     venue: '',
@@ -29,11 +40,43 @@ export default function CreateEvent() {
     description: '',
     status: 'active',
   })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
+  const [fetching, setFetching] = useState(true)
+
+  useEffect(() => {
+    async function fetchEvent() {
+      if (!eventId) return;
+      try {
+        const snap = await getDoc(doc(db, 'events', eventId))
+        if (snap.exists()) {
+          const data = snap.data()
+          const startDate = data.startTime?.toDate ? data.startTime.toDate() : new Date(data.startTime)
+          const endDate = data.endTime?.toDate ? data.endTime.toDate() : new Date(data.endTime)
+
+          setForm({
+            dayNumber: String(data.dayNumber || 1),
+            name: data.name || '',
+            venue: data.venue || '',
+            venueDirections: data.venueDirections || getDefaultDirections(data.venue || ''),
+            date: data.date || startDate.toISOString().split('T')[0],
+            startTime: startDate.toTimeString().slice(0, 5),
+            endTime: endDate.toTimeString().slice(0, 5),
+            description: data.description || '',
+            status: data.status || 'active',
+          })
+        }
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setFetching(false)
+      }
+    }
+    fetchEvent()
+  }, [eventId])
 
   function validate() {
-    const e = {}
+    const e: Record<string, string> = {}
     if (!form.name.trim()) e.name = 'Event name is required'
     if (!form.venue) e.venue = 'Venue is required'
     if (!form.date) e.date = 'Date is required'
@@ -42,13 +85,13 @@ export default function CreateEvent() {
     return e
   }
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name: string, value: string } }) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
     setErrors(prev => ({ ...prev, [name]: '' }))
   }
 
-  function handleVenueChange(venueName) {
+  function handleVenueChange(venueName: string) {
     setForm(prev => ({
       ...prev,
       venue: venueName,
@@ -64,8 +107,9 @@ export default function CreateEvent() {
     }
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!eventId) return;
     const validationErrors = validate()
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
@@ -77,7 +121,7 @@ export default function CreateEvent() {
       const startTime = Timestamp.fromDate(new Date(`${form.date}T${form.startTime}`))
       const endTime = Timestamp.fromDate(new Date(`${form.date}T${form.endTime}`))
 
-      await addDoc(collection(db, 'events'), {
+      await updateDoc(doc(db, 'events', eventId), {
         dayNumber: parseInt(form.dayNumber),
         name: form.name.trim(),
         venue: form.venue.trim(),
@@ -87,32 +131,37 @@ export default function CreateEvent() {
         endTime,
         description: form.description.trim(),
         status: form.status,
-        createdBy: user.uid,
-        createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       })
 
       navigate('/admin')
     } catch (err) {
       console.error(err)
-      setErrors({ submit: 'Failed to create event' })
+      setErrors({ submit: 'Failed to update event' })
     } finally {
       setLoading(false)
     }
+  }
+
+  if (fetching) {
+    return (
+      <div className="admin-page">
+        <div className="loading-screen"><div className="spinner" /></div>
+      </div>
+    )
   }
 
   return (
     <div className="admin-page">
       <div className="admin-header">
         <div className="admin-header__inner">
-          <h1 className="admin-header__title">Create Event</h1>
+          <h1 className="admin-header__title">Edit Event</h1>
           <button className="admin-back-btn" onClick={() => navigate(-1)}>← Back</button>
         </div>
       </div>
 
       <div className="admin-content">
         <form onSubmit={handleSubmit} className="admin-form">
-          {/* Day Number */}
           <div className="form-group">
             <label className="form-label">Day Number *</label>
             <CustomDayPicker 
@@ -122,10 +171,9 @@ export default function CreateEvent() {
             />
           </div>
 
-          {/* Event Name */}
           <div className="form-group">
             <label className="form-label">Event Name *</label>
-            <input name="name" value={form.name} onChange={handleChange} placeholder="e.g. Campus Tour" className={`form-input ${errors.name ? 'form-input--error' : ''}`} />
+            <input name="name" value={form.name} onChange={handleChange as any} placeholder="e.g. Campus Tour" className={`form-input ${errors.name ? 'form-input--error' : ''}`} />
             {errors.name && <p className="form-error">{errors.name}</p>}
           </div>
 
@@ -136,7 +184,7 @@ export default function CreateEvent() {
               value={form.venue}
               options={VENUE_LIST.map(v => ({ label: v, value: v }))}
               onChange={handleVenueChange}
-              error={errors.venue}
+              error={!!errors.venue}
               placeholder="Select a venue"
             />
             {errors.venue && <p className="form-error">{errors.venue}</p>}
@@ -160,7 +208,7 @@ export default function CreateEvent() {
               <textarea
                 name="venueDirections"
                 value={form.venueDirections}
-                onChange={handleChange}
+                onChange={handleChange as any}
                 placeholder="Directions to reach this venue..."
                 className="form-textarea"
                 rows={3}
@@ -169,19 +217,17 @@ export default function CreateEvent() {
             </div>
           )}
 
-          {/* Date */}
           <div className="form-group">
             <label className="form-label">Date *</label>
             <CustomDatePicker 
               name="date" 
               value={form.date} 
               onChange={handleChange} 
-              error={errors.date} 
+              error={!!errors.date} 
             />
             {errors.date && <p className="form-error">{errors.date}</p>}
           </div>
 
-          {/* Times */}
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">Start Time *</label>
@@ -189,9 +235,8 @@ export default function CreateEvent() {
                 name="startTime" 
                 value={form.startTime} 
                 onChange={handleChange} 
-                error={errors.startTime} 
+                error={!!errors.startTime} 
               />
-              {errors.startTime && <p className="form-error">{errors.startTime}</p>}
             </div>
             <div className="form-group">
               <label className="form-label">End Time *</label>
@@ -199,20 +244,17 @@ export default function CreateEvent() {
                 name="endTime" 
                 value={form.endTime} 
                 onChange={handleChange} 
-                error={errors.endTime} 
+                error={!!errors.endTime} 
                 alignRight={true}
               />
-              {errors.endTime && <p className="form-error">{errors.endTime}</p>}
             </div>
           </div>
 
-          {/* Description */}
           <div className="form-group">
             <label className="form-label">Description</label>
-            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Event description..." className="form-textarea" rows={4} />
+            <textarea name="description" value={form.description} onChange={handleChange as any} placeholder="Event description..." className="form-textarea" rows={4} />
           </div>
 
-          {/* Status */}
           <div className="form-group">
             <label className="form-label">Status</label>
             <CustomSelect
@@ -230,9 +272,9 @@ export default function CreateEvent() {
 
           <button type="submit" disabled={loading} className="admin-submit-btn">
             {loading ? (
-              <><div className="spinner spinner--small" /> Creating...</>
+              <><div className="spinner spinner--small" /> Saving...</>
             ) : (
-              'Create Event'
+              'Save Changes'
             )}
           </button>
         </form>

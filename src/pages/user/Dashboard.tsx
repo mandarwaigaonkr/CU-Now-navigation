@@ -1,4 +1,4 @@
-// src/pages/user/Dashboard.jsx
+// src/pages/user/Dashboard.tsx
 // Home dashboard — "Happening Now" + "Up Next" sections
 
 import { useState, useEffect, useMemo } from 'react'
@@ -6,17 +6,22 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useEvents } from '../../context/EventsContext'
 import { formatTime, getCountdown } from '../../utils/formatters'
-import { getVenueByName } from '../../data/venues'
+import { getVenueByName, Venue } from '../../data/venues'
 import VenueDirections from '../../components/VenueDirections'
 import christLogo from '../../assets/christ-logo.png'
 import './Dashboard.css'
 
+interface SelectedVenueEvent {
+  venue: Venue | null;
+  directions: string | null;
+}
+
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { user, profile, isAdmin } = useAuth()
+  const { user, profile } = useAuth()
   const { events, loading } = useEvents()
   const [now, setNow] = useState(new Date())
-  const [selectedVenueEvent, setSelectedVenueEvent] = useState(null)
+  const [selectedVenueEvent, setSelectedVenueEvent] = useState<SelectedVenueEvent | null>(null)
 
   // Live clock — update every 30 seconds
   useEffect(() => {
@@ -31,15 +36,15 @@ export default function Dashboard() {
 
   const happeningNow = useMemo(() => {
     return activeEvents.filter(e => {
-      const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime)
-      const end = e.endTime?.toDate ? e.endTime.toDate() : new Date(e.endTime)
+      const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime as any)
+      const end = e.endTime?.toDate ? e.endTime.toDate() : new Date(e.endTime as any)
       return now >= start && now <= end
     })
   }, [activeEvents, now])
 
   const upNext = useMemo(() => {
     return activeEvents.filter(e => {
-      const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime)
+      const start = e.startTime?.toDate ? e.startTime.toDate() : new Date(e.startTime as any)
       return start > now
     }).slice(0, 3)
   }, [activeEvents, now])
@@ -110,7 +115,7 @@ export default function Dashboard() {
                           <circle cx="12" cy="12" r="10"/>
                           <polyline points="12 6 12 12 16 14"/>
                         </svg>
-                        <span>{formatTime(event.startTime)} – {formatTime(event.endTime)}</span>
+                        <span>{formatTime(event.startTime as any)} – {formatTime(event.endTime as any)}</span>
                       </div>
                     </div>
                     {event.description && (
@@ -121,14 +126,14 @@ export default function Dashboard() {
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12 6 12 12 16 14"/>
                       </svg>
-                      Ends in {getCountdown(event.endTime)}
+                      Ends in {getCountdown(event.endTime as any)}
                     </div>
                     
                     <button 
                       className="now-card__directions-btn" 
                       onClick={() => setSelectedVenueEvent({
-                        venue: getVenueByName(event.venue),
-                        directions: event.venueDirections
+                        venue: getVenueByName(event.venue) || null,
+                        directions: event.venueDirections || null
                       })}
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -166,7 +171,7 @@ export default function Dashboard() {
                   {upNext.map(event => (
                     <div key={event.id} className="next-card">
                       <div className="next-card__time">
-                        {formatTime(event.startTime)}
+                        {formatTime(event.startTime as any)}
                       </div>
                       <div className="next-card__info">
                         <h4 className="next-card__name">{event.name}</h4>
@@ -179,7 +184,7 @@ export default function Dashboard() {
                         </div>
                       </div>
                       <div className="next-card__countdown">
-                        Starts in {getCountdown(event.startTime)}
+                        Starts in {getCountdown(event.startTime as any)}
                       </div>
                     </div>
                   ))}
@@ -202,7 +207,7 @@ export default function Dashboard() {
       {selectedVenueEvent && (
         <VenueDirections 
           venue={selectedVenueEvent.venue} 
-          directions={selectedVenueEvent.directions}
+          directions={selectedVenueEvent.directions || ''}
           onClose={() => setSelectedVenueEvent(null)} 
         />
       )}

@@ -1,18 +1,24 @@
-// src/context/ThemeContext.jsx
-// Dark/light theme toggle with system preference detection
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+export interface ThemeContextType {
+  isDark: boolean;
+  toggleTheme: () => void;
+}
 
-const ThemeContext = createContext(null)
+const ThemeContext = createContext<ThemeContextType | null>(null)
 
-export function useTheme() {
+export function useTheme(): ThemeContextType {
   const ctx = useContext(ThemeContext)
   if (!ctx) throw new Error('useTheme must be used inside ThemeProvider')
   return ctx
 }
 
-export function ThemeProvider({ children }) {
-  const [isDark, setIsDark] = useState(() => {
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  const [isDark, setIsDark] = useState<boolean>(() => {
     const stored = localStorage.getItem('cu-now-theme')
     if (stored) return stored === 'dark'
     return window.matchMedia('(prefers-color-scheme: dark)').matches

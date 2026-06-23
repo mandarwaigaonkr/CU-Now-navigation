@@ -1,4 +1,4 @@
-// src/pages/auth/Login.jsx
+// src/pages/auth/Login.tsx
 // Premium Christ University CU Now login page
 // Supports Student, Guest, and Admin login modes
 
@@ -8,13 +8,12 @@ import {
   getRedirectResult,
   signInWithPopup,
   signInWithRedirect,
-  signOut,
+  User as FirebaseUser
 } from 'firebase/auth'
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db, googleProvider } from '../../firebase'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../context/ThemeContext'
-import { extractRegNumber, extractCleanName } from '../../utils/formatters'
 
 // Assets
 import christLogo from '../../assets/christ-logo.png'
@@ -24,12 +23,11 @@ import bgDark from '../../assets/bg-dark.png'
 // Scoped styles
 import './Login.css'
 
-const ALLOWED_DOMAIN = 'christuniversity.in'
 const LOGIN_MODE_KEY = 'cu-now-login-mode'
 
 /* ---- Auth helpers ---- */
 
-function authErrorMessage(code) {
+function authErrorMessage(code: string): string {
   switch (code) {
     case 'auth/popup-closed-by-user':
       return 'Sign-in was cancelled.'
@@ -42,7 +40,7 @@ function authErrorMessage(code) {
   }
 }
 
-async function ensureGuestProfile(firebaseUser, navigate) {
+async function ensureGuestProfile(firebaseUser: FirebaseUser, navigate: ReturnType<typeof useNavigate>) {
   // No domain restriction for guests — any email allowed
   const userRef = doc(db, 'users', firebaseUser.uid)
   const userSnap = await getDoc(userRef)
@@ -63,11 +61,11 @@ async function ensureGuestProfile(firebaseUser, navigate) {
   }
 
   const data = userSnap.data()
-  if (!data.onboarded) navigate('/onboarding', { replace: true })
+  if (!data?.onboarded) navigate('/onboarding', { replace: true })
   else navigate('/dashboard', { replace: true })
 }
 
-async function ensureAdminProfile(firebaseUser, navigate) {
+async function ensureAdminProfile(firebaseUser: FirebaseUser, navigate: ReturnType<typeof useNavigate>) {
   const userRef = doc(db, 'users', firebaseUser.uid)
   const userSnap = await getDoc(userRef)
 
@@ -91,7 +89,7 @@ async function ensureAdminProfile(firebaseUser, navigate) {
   }
 
   const data = userSnap.data()
-  if (data.role === 'admin' && data.onboarded) {
+  if (data?.role === 'admin' && data?.onboarded) {
     navigate('/admin', { replace: true })
     return
   }
@@ -112,16 +110,7 @@ function GoogleIcon() {
   )
 }
 
-function UserIcon({ className }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-      <circle cx="12" cy="7" r="4"/>
-    </svg>
-  )
-}
-
-function GlobeIcon({ className }) {
+function GlobeIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
@@ -131,7 +120,7 @@ function GlobeIcon({ className }) {
   )
 }
 
-function LockIcon({ className }) {
+function LockIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -140,7 +129,7 @@ function LockIcon({ className }) {
   )
 }
 
-function ShieldCheckIcon({ className }) {
+function ShieldCheckIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -155,7 +144,7 @@ function ShieldCheckIcon({ className }) {
 
 export default function Login() {
   const [loading, setLoading] = useState(false)
-  const [loginMode, setLoginMode] = useState('guest')
+  const [loginMode, setLoginMode] = useState<'guest' | 'admin'>('guest')
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const { user, profile, loading: authLoading, isAdmin, isOnboarded } = useAuth()
@@ -182,7 +171,7 @@ export default function Login() {
         const mode = sessionStorage.getItem(LOGIN_MODE_KEY) || 'guest'
         if (mode === 'admin') await ensureAdminProfile(result.user, navigate)
         else await ensureGuestProfile(result.user, navigate)
-      } catch (err) {
+      } catch (err: any) {
         console.error(err)
         if (mounted) setError(authErrorMessage(err.code))
       }
@@ -194,7 +183,7 @@ export default function Login() {
     }
   }, [navigate])
 
-  async function handleGoogleSignIn(mode) {
+  async function handleGoogleSignIn(mode: 'guest' | 'admin') {
     setLoading(true)
     setLoginMode(mode)
     setError('')
@@ -203,7 +192,7 @@ export default function Login() {
       const result = await signInWithPopup(auth, googleProvider)
       if (mode === 'admin') await ensureAdminProfile(result.user, navigate)
       else await ensureGuestProfile(result.user, navigate)
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
       setError(authErrorMessage(err.code))
       if (err.code === 'auth/popup-blocked') {

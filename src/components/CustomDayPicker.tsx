@@ -9,7 +9,13 @@ const DAY_OPTIONS = [
   { value: '6', label: 'Day 6', sub: 'Sat' },
 ]
 
-export default function CustomDayPicker({ name, value, onChange }) {
+interface CustomDayPickerProps {
+  name: string;
+  value: string;
+  onChange: (e: { target: { name: string; value: string } }) => void;
+}
+
+export default function CustomDayPicker({ name, value, onChange }: CustomDayPickerProps) {
   return (
     <div className="admin-day-picker">
       <div className="admin-day-grid">

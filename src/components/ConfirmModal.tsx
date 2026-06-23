@@ -1,7 +1,18 @@
-// src/components/ConfirmModal.jsx
+// src/components/ConfirmModal.tsx
 // Reusable confirmation dialog with backdrop blur
 
 import './ConfirmModal.css'
+
+interface ConfirmModalProps {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  isDestructive?: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
 
 export default function ConfirmModal({
   isOpen,
@@ -12,7 +23,7 @@ export default function ConfirmModal({
   isDestructive = false,
   onConfirm,
   onCancel,
-}) {
+}: ConfirmModalProps) {
   if (!isOpen) return null
 
   return (

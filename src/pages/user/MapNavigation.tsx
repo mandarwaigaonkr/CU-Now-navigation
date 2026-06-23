@@ -1,4 +1,3 @@
-import React from 'react';
 import './MapNavigation.css';
 
 export default function MapNavigation() {

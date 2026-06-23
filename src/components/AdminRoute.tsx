@@ -1,11 +1,12 @@
 // src/components/AdminRoute.jsx
 // Guards routes that require admin role
 
+import { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
-export default function AdminRoute({ children }) {
-  const { user, profile, loading, isAdmin } = useAuth()
+export default function AdminRoute({ children }: { children: ReactNode }) {
+  const { user, loading, isAdmin } = useAuth()
 
   if (loading) return (
     <div className="loading-screen">

@@ -1,9 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import './CustomInputs.css'
 
-export default function CustomTimePicker({ name, value, onChange, error, alignRight }) {
+interface CustomTimePickerProps {
+  name: string;
+  value: string;
+  onChange: (e: { target: { name: string; value: string } }) => void;
+  error?: boolean;
+  alignRight?: boolean;
+}
+
+export default function CustomTimePicker({ name, value, onChange, error, alignRight }: CustomTimePickerProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Parse initial 24h value (e.g. "14:30")
   const [hour, setHour] = useState('12')
@@ -25,8 +33,8 @@ export default function CustomTimePicker({ name, value, onChange, error, alignRi
   }, [value])
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -34,7 +42,7 @@ export default function CustomTimePicker({ name, value, onChange, error, alignRi
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  function updateValue(h, m, ap) {
+  function updateValue(h: string, m: string, ap: string) {
     let h24 = parseInt(h, 10)
     if (ap === 'PM' && h24 < 12) h24 += 12
     if (ap === 'AM' && h24 === 12) h24 = 0
@@ -43,17 +51,17 @@ export default function CustomTimePicker({ name, value, onChange, error, alignRi
     onChange({ target: { name, value: newValue } })
   }
 
-  const handleHourChange = (newHour) => {
+  const handleHourChange = (newHour: string) => {
     setHour(newHour)
     updateValue(newHour, minute, ampm)
   }
 
-  const handleMinuteChange = (newMinute) => {
+  const handleMinuteChange = (newMinute: string) => {
     setMinute(newMinute)
     updateValue(hour, newMinute, ampm)
   }
 
-  const handleAmpmChange = (newAmpm) => {
+  const handleAmpmChange = (newAmpm: string) => {
     setAmpm(newAmpm)
     updateValue(hour, minute, newAmpm)
   }

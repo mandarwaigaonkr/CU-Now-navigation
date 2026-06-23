@@ -1,26 +1,43 @@
-// src/context/AuthContext.jsx
-// Provides auth state, user profile, and role to the entire app
-
-import { createContext, useContext, useEffect, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { User, onAuthStateChanged } from 'firebase/auth'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { auth, db } from '../firebase'
 
-export const AuthContext = createContext(null)
+export interface UserProfile {
+  id: string;
+  role?: string;
+  group?: number;
+  onboarded?: boolean;
+  [key: string]: any;
+}
 
-export function useAuth() {
+export interface AuthContextType {
+  user: User | null;
+  profile: UserProfile | null;
+  loading: boolean;
+  isAdmin: boolean;
+  isOnboarded: boolean;
+}
+
+export const AuthContext = createContext<AuthContextType | null>(null)
+
+export function useAuth(): AuthContextType {
   const context = useContext(AuthContext)
   if (!context) throw new Error('useAuth must be used inside AuthProvider')
   return context
 }
 
-export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)       // Firebase Auth user
-  const [profile, setProfile] = useState(null) // Firestore user document
-  const [loading, setLoading] = useState(true)
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export default function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null)       // Firebase Auth user
+  const [profile, setProfile] = useState<UserProfile | null>(null) // Firestore user document
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    let unsubProfile = null
+    let unsubProfile: (() => void) | null = null
 
     const unsubAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       if (unsubProfile) unsubProfile()
@@ -31,7 +48,7 @@ export default function AuthProvider({ children }) {
         // Listen to user's Firestore document in real time
         const userRef = doc(db, 'users', firebaseUser.uid)
         unsubProfile = onSnapshot(userRef, (snap) => {
-          setProfile(snap.exists() ? { id: snap.id, ...snap.data() } : null)
+          setProfile(snap.exists() ? { id: snap.id, ...snap.data() } as UserProfile : null)
           setLoading(false)
         })
       } else {

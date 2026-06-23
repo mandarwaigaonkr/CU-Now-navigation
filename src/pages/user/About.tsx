@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import VENUES from '../../data/venues'
 import Navbar from '../../components/Navbar'
 import './About.css'
 
-const ADDITIONAL_FACILITIES = {
+const ADDITIONAL_FACILITIES: Record<string, string[]> = {
   'Block 1': ['Admission Office', 'Director\'s Office', 'Office of International Affairs', 'Block 1 Audi', 'University Media Team'],
   '2nd Block': ['SWO Office'],
   '3rd Block': ['CAPS Office', 'Sports Department', 'Choir'],
@@ -13,11 +13,18 @@ const ADDITIONAL_FACILITIES = {
   'PU Block': ['A residential college focusing on international standards curriculum for pre-university']
 }
 
+interface BlockData {
+  name: string;
+  image: string;
+  facilities: string[];
+}
+
 export default function About() {
-  const [expandedBlock, setExpandedBlock] = useState(null)
+  const [expandedBlock, setExpandedBlock] = useState<string | null>(null)
+  
   // Group venues by their block
   const blocks = useMemo(() => {
-    const blocksMap = VENUES.reduce((acc, venue) => {
+    const blocksMap = VENUES.reduce((acc: Record<string, BlockData>, venue) => {
       // Use the block name as the key
       const blockKey = venue.block || 'Other'
       if (!acc[blockKey]) {
@@ -37,7 +44,7 @@ export default function About() {
     }, {})
 
     // Add additional facilities and ensure all blocks exist
-    const imageFallbacks = {
+    const imageFallbacks: Record<string, string> = {
       'Block 4': '/venues/fourth_block.jpg'
     }
 

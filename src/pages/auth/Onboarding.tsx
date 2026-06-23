@@ -1,7 +1,7 @@
-// src/pages/auth/Onboarding.jsx
+// src/pages/auth/Onboarding.tsx
 // Profile completion — Guest: name and organization
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -15,18 +15,20 @@ export default function Onboarding() {
 
   const [nameInput, setNameInput] = useState(user?.displayName || '')
   const [orgInput, setOrgInput] = useState('')
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
 
   function validate() {
-    const e = {}
+    const e: Record<string, string> = {}
     if (!nameInput.trim()) e.name = 'Name is required'
     if (!orgInput.trim()) e.org = 'Organization is required'
     return e
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!user) return;
+    
     const validationErrors = validate()
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
