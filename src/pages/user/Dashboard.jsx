@@ -5,7 +5,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useEvents } from '../../context/EventsContext'
-import { useUnreadAnnouncements } from '../../hooks/useUnreadAnnouncements'
 import { formatTime, getCountdown } from '../../utils/formatters'
 import { getVenueByName } from '../../data/venues'
 import VenueDirections from '../../components/VenueDirections'
@@ -15,7 +14,6 @@ import './Dashboard.css'
 export default function Dashboard() {
   const navigate = useNavigate()
   const { user, profile, isAdmin } = useAuth()
-  const { hasUnread } = useUnreadAnnouncements()
   const { events, loading } = useEvents()
   const [now, setNow] = useState(new Date())
   const [selectedVenueEvent, setSelectedVenueEvent] = useState(null)
@@ -87,22 +85,6 @@ export default function Dashboard() {
           </div>
         ) : (
           <>
-            {/* ===== ANNOUNCEMENT BANNER ===== */}
-            {hasUnread && (
-              <div className="dashboard-alert" onClick={() => navigate('/announcements')}>
-                <span className="dashboard-alert__icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-                </span>
-                <div className="dashboard-alert__content">
-                  <p className="dashboard-alert__title">New Update Available</p>
-                  <p className="dashboard-alert__desc">Kindly check the updates section for new announcements.</p>
-                </div>
-                <svg className="dashboard-alert__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
-            )}
-
             {/* ===== HAPPENING NOW ===== */}
             <section className="dashboard-section">
               <div className="section-header">

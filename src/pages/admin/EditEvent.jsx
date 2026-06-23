@@ -27,7 +27,6 @@ export default function EditEvent() {
     endTime: '',
     description: '',
     status: 'active',
-    targetGroup: 'all',
   })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
@@ -52,7 +51,6 @@ export default function EditEvent() {
             endTime: endDate.toTimeString().slice(0, 5),
             description: data.description || '',
             status: data.status || 'active',
-            targetGroup: data.targetGroup !== undefined ? data.targetGroup : 'all',
           })
         }
       } catch (err) {
@@ -119,7 +117,6 @@ export default function EditEvent() {
         endTime,
         description: form.description.trim(),
         status: form.status,
-        targetGroup: form.targetGroup === 'all' ? 'all' : parseInt(form.targetGroup),
         updatedAt: serverTimestamp(),
       })
 

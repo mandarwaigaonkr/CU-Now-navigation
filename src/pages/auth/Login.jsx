@@ -327,46 +327,64 @@ export default function Login() {
 
         {/* ---- ADAPTIVE LOGIN CARD ---- */}
         <div className={`login-card-single login-animate-in login-animate-in--cards ${cfg.cardClass}`}>
-          <div className="login-card__content" key={loginMode}>
-            {/* Icon */}
-            <div className={`login-card__icon ${cfg.iconClass}`}>
-              <GoogleIcon />
+          <div className="login-card-slider-wrapper">
+            <div className={`login-card-slider ${loginMode === 'admin' ? 'login-card-slider--admin' : ''}`}>
+              
+              {/* GUEST CARD */}
+              <div className="login-card__content">
+                <span className="login-card__title">{cardConfig.guest.title}</span>
+                <span className="login-card__action">{cardConfig.guest.action}</span>
+                <span className="login-card__role">{cardConfig.guest.role}</span>
+                <div className="login-card__support">
+                  {cardConfig.guest.supportIcon}
+                  <span className="login-card__support-text">{cardConfig.guest.support}</span>
+                </div>
+                <button
+                  id={cardConfig.guest.btnId}
+                  onClick={() => handleGoogleSignIn('guest')}
+                  disabled={loading}
+                  className={`login-btn ${cardConfig.guest.btnClass}`}
+                >
+                  {loading && loginMode === 'guest' ? (
+                    <div className="login-spinner" />
+                  ) : (
+                    <>
+                      <GoogleIcon />
+                      {cardConfig.guest.action}
+                      <span className="login-btn__arrow">→</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* ADMIN CARD */}
+              <div className="login-card__content">
+                <span className="login-card__title">{cardConfig.admin.title}</span>
+                <span className="login-card__action">{cardConfig.admin.action}</span>
+                <span className="login-card__role">{cardConfig.admin.role}</span>
+                <div className="login-card__support">
+                  {cardConfig.admin.supportIcon}
+                  <span className="login-card__support-text">{cardConfig.admin.support}</span>
+                </div>
+                <button
+                  id={cardConfig.admin.btnId}
+                  onClick={() => handleGoogleSignIn('admin')}
+                  disabled={loading}
+                  className={`login-btn ${cardConfig.admin.btnClass}`}
+                >
+                  {loading && loginMode === 'admin' ? (
+                    <div className="login-spinner" />
+                  ) : (
+                    <>
+                      <GoogleIcon />
+                      {cardConfig.admin.action}
+                      <span className="login-btn__arrow">→</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
             </div>
-
-            <span className="login-card__title">
-              {cfg.title}
-            </span>
-            <span className="login-card__action">
-              {cfg.action}
-            </span>
-            <span className="login-card__role">
-              {cfg.role}
-            </span>
-
-            {/* Support text */}
-            <div className="login-card__support">
-              {cfg.supportIcon}
-              <span className="login-card__support-text">
-                {cfg.support}
-              </span>
-            </div>
-
-            {/* CTA */}
-            <button
-              id={cfg.btnId}
-              onClick={() => handleGoogleSignIn(loginMode)}
-              disabled={loading}
-              className={`login-btn ${cfg.btnClass}`}
-            >
-              {loading ? (
-                <div className="login-spinner" />
-              ) : (
-                <>
-                  {cfg.action}
-                  <span className="login-btn__arrow">→</span>
-                </>
-              )}
-            </button>
           </div>
         </div>
 

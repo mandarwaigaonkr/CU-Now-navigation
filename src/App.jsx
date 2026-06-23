@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import AuthProvider from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
-import GroupConfigProvider from './context/GroupConfigContext'
 import EventsProvider from './context/EventsContext'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -33,7 +32,6 @@ const AdminOnboarding = lazy(() => import('./pages/auth/AdminOnboarding'))
 // User pages
 const Dashboard = lazy(() => import('./pages/user/Dashboard'))
 const Schedule = lazy(() => import('./pages/user/Schedule'))
-const Announcements = lazy(() => import('./pages/user/Announcements'))
 const Profile = lazy(() => import('./pages/user/Profile'))
 const About = lazy(() => import('./pages/user/About'))
 const MapNavigation = lazy(() => import('./pages/user/MapNavigation'))
@@ -41,15 +39,11 @@ const MapNavigation = lazy(() => import('./pages/user/MapNavigation'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const CreateEvent = lazy(() => import('./pages/admin/CreateEvent'))
 const EditEvent = lazy(() => import('./pages/admin/EditEvent'))
-const CreateAnnouncement = lazy(() => import('./pages/admin/CreateAnnouncement'))
-const ManageGroups = lazy(() => import('./pages/admin/ManageGroups'))
-const AdminFeedbacks = lazy(() => import('./pages/admin/AdminFeedbacks'))
 
 export default function App() {
   return (
     <ThemeProvider>
     <BrowserRouter>
-      <GroupConfigProvider>
       <AuthProvider>
         <EventsProvider>
         {/* Global toast notifications */}
@@ -84,9 +78,6 @@ export default function App() {
             <Route path="/schedule" element={
               <ProtectedRoute><Schedule /></ProtectedRoute>
             } />
-            <Route path="/announcements" element={
-              <ProtectedRoute><Announcements /></ProtectedRoute>
-            } />
             <Route path="/profile" element={
               <ProtectedRoute><Profile /></ProtectedRoute>
             } />
@@ -98,7 +89,6 @@ export default function App() {
             } />
           </Route>
 
-          {/* Admin routes */}
           <Route path="/admin" element={
             <AdminRoute><AdminDashboard /></AdminRoute>
           } />
@@ -107,15 +97,6 @@ export default function App() {
           } />
           <Route path="/admin/edit-event/:eventId" element={
             <AdminRoute><EditEvent /></AdminRoute>
-          } />
-          <Route path="/admin/create-announcement" element={
-            <AdminRoute><CreateAnnouncement /></AdminRoute>
-          } />
-          <Route path="/admin/manage-groups" element={
-            <AdminRoute><ManageGroups /></AdminRoute>
-          } />
-          <Route path="/admin/feedbacks" element={
-            <AdminRoute><AdminFeedbacks /></AdminRoute>
           } />
 
           {/* Default redirect */}
@@ -129,7 +110,6 @@ export default function App() {
         <InstallBanner />
         </EventsProvider>
       </AuthProvider>
-      </GroupConfigProvider>
     </BrowserRouter>
     <Analytics />
     </ThemeProvider>

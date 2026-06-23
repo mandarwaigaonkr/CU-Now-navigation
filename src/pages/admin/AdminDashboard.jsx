@@ -15,7 +15,6 @@ const DAY_LABELS = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6']
 export default function AdminDashboard() {
   const navigate = useNavigate()
   const [events, setEvents] = useState([])
-  const [announcements, setAnnouncements] = useState([])
   const [pendingAdmins, setPendingAdmins] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleteTarget, setDeleteTarget] = useState(null)
@@ -26,33 +25,24 @@ export default function AdminDashboard() {
       setEvents(snap.docs.map(d => ({ id: d.id, ...d.data() })))
       setLoading(false)
     })
-    const q2 = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'))
-    const unsub2 = onSnapshot(q2, snap => {
-      setAnnouncements(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-    })
     // Listen for pending admin requests
     const q3 = query(collection(db, 'users'), where('adminStatus', '==', 'pending'))
     const unsub3 = onSnapshot(q3, snap => {
       setPendingAdmins(snap.docs.map(d => ({ id: d.id, ...d.data() })))
     })
-    return () => { unsub1(); unsub2(); unsub3() }
+    return () => { unsub1(); unsub3() }
   }, [])
 
   async function handleDelete() {
     if (!deleteTarget) return
     const targetId = deleteTarget.id
-    const isAnnouncement = deleteTarget.type === 'announcement'
     
     // Optimistic remove
-    if (isAnnouncement) {
-      setAnnouncements(prev => prev.filter(a => a.id !== targetId))
-    } else {
-      setEvents(prev => prev.filter(e => e.id !== targetId))
-    }
+    setEvents(prev => prev.filter(e => e.id !== targetId))
     setDeleteTarget(null)
     
     try {
-      await deleteDoc(doc(db, isAnnouncement ? 'announcements' : 'events', targetId))
+      await deleteDoc(doc(db, 'events', targetId))
     } catch (err) {
       console.error(err)
     }
@@ -92,7 +82,7 @@ export default function AdminDashboard() {
         <div className="admin-header__inner">
           <div>
             <h1 className="admin-header__title">Admin Panel</h1>
-            <p className="admin-header__sub">{totalEvents} events · {announcements.length} announcements</p>
+            <p className="admin-header__sub">{totalEvents} events in total</p>
           </div>
           <button className="admin-back-btn" onClick={() => navigate('/dashboard')}>
             ← Back
@@ -108,24 +98,6 @@ export default function AdminDashboard() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </span>
             Add Event
-          </button>
-          <button className="admin-action-btn" onClick={() => navigate('/admin/create-announcement')}>
-            <span className="admin-action-btn__icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-            </span>
-            Announcement
-          </button>
-          <button className="admin-action-btn" onClick={() => navigate('/admin/manage-groups')}>
-            <span className="admin-action-btn__icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-            </span>
-            Groups
-          </button>
-          <button className="admin-action-btn" onClick={() => navigate('/admin/feedbacks')}>
-            <span className="admin-action-btn__icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            </span>
-            Feedbacks
           </button>
         </div>
 
@@ -193,38 +165,7 @@ export default function AdminDashboard() {
             <span className="admin-stat__number">{activeEvents}</span>
             <span className="admin-stat__label">Active</span>
           </div>
-          <div className="admin-stat">
-            <span className="admin-stat__number">{announcements.length}</span>
-            <span className="admin-stat__label">Updates</span>
-          </div>
         </div>
-
-        {/* Announcements */}
-        {announcements.length > 0 && (
-          <div className="admin-day-group">
-            <h3 className="admin-day-title">Announcements</h3>
-            <div className="admin-event-list">
-              {announcements.map(ann => (
-                <div key={ann.id} className="admin-event-card">
-                  <div className="admin-event-info">
-                    <span className={`admin-event-status admin-event-status--active`}>
-                      {ann.urgency || 'normal'}
-                    </span>
-                    <h4 className="admin-event-name">{ann.title}</h4>
-                    <p className="admin-event-meta">
-                      {timeAgo(ann.createdAt)} · {ann.message?.substring(0, 50)}{ann.message?.length > 50 ? '...' : ''}
-                    </p>
-                  </div>
-                  <div className="admin-event-actions">
-                    <button className="admin-icon-btn admin-icon-btn--danger" onClick={() => setDeleteTarget({ ...ann, type: 'announcement' })}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Events by Day */}
         {loading ? (
@@ -270,8 +211,8 @@ export default function AdminDashboard() {
 
       <ConfirmModal
         isOpen={!!deleteTarget}
-        title={`Delete ${deleteTarget?.type === 'announcement' ? 'Announcement' : 'Event'}`}
-        message={`Are you sure you want to delete "${deleteTarget?.type === 'announcement' ? deleteTarget?.title : deleteTarget?.name}"? This cannot be undone.`}
+        title={`Delete Event`}
+        message={`Are you sure you want to delete "${deleteTarget?.name}"? This cannot be undone.`}
         confirmText="Delete"
         isDestructive={true}
         onConfirm={handleDelete}

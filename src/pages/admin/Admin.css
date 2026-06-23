@@ -11,12 +11,15 @@
 .admin-header {
   flex-shrink: 0;
   z-index: 40;
-  background: var(--color-bg-card);
-  border-bottom: 1px solid var(--color-bg-border);
+  background: rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .dark .admin-header {
-  background: var(--color-bg-card);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 20, 30, 0.4);
 }
 
 .admin-header__inner {
@@ -43,14 +46,19 @@
 .admin-back-btn {
   padding: 7px 12px;
   border-radius: var(--radius);
-  border: 1px solid var(--color-bg-border);
-  background: var(--color-bg-card);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   cursor: pointer;
   transition: all 150ms ease;
+}
+
+.dark .admin-back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .admin-back-btn:active {
@@ -82,8 +90,8 @@
   width: 100%;
   height: 38px;
   border-radius: var(--radius);
-  border: 1px solid var(--color-bg-border);
-  background: var(--color-bg-card);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.6);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -96,14 +104,24 @@
   transition: all 150ms ease;
 }
 
+.dark .admin-action-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .admin-action-btn:active {
   transform: scale(0.98);
 }
 
 .admin-action-btn--primary {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  background: linear-gradient(135deg, #3F3F46 0%, #71717A 100%);
+  border: none;
   color: #fff;
+  box-shadow: 0 4px 12px rgba(63, 63, 70, 0.2);
+}
+
+.dark .admin-action-btn--primary {
+  background: linear-gradient(135deg, #27272A 0%, #52525B 100%);
 }
 
 .admin-action-btn__icon {
@@ -160,10 +178,19 @@
 }
 
 .admin-approval-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-bg-border);
-  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
   padding: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dark .admin-approval-card {
+  background: rgba(15, 20, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .admin-approval-card__info {
@@ -262,12 +289,14 @@
 }
 
 .admin-approval-btn--approve {
-  background: #16A34A;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
   color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .admin-approval-btn--approve:hover {
-  background: #15803D;
+  opacity: 0.9;
 }
 
 .admin-approval-btn--reject {
@@ -299,11 +328,20 @@
 
 .admin-stat {
   flex: 1;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-bg-border);
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius);
   padding: 12px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dark .admin-stat {
+  background: rgba(15, 20, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .admin-stat__number {
@@ -345,10 +383,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-bg-border);
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius);
   padding: 12px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dark .admin-event-card {
+  background: rgba(15, 20, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .admin-event-info {
@@ -408,14 +455,19 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius);
-  border: 1px solid var(--color-bg-border);
-  background: var(--color-bg-elevated);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.5);
   color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 150ms ease;
+}
+
+.dark .admin-icon-btn {
+  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .admin-icon-btn svg {
@@ -484,14 +536,19 @@
   gap: 4px;
   padding: 3px 8px;
   border-radius: var(--radius);
-  border: 1px solid var(--color-bg-border);
-  background: var(--color-bg-elevated);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 500;
   color: var(--color-text-muted);
   cursor: pointer;
   transition: all 150ms ease;
+}
+
+.dark .admin-form .form-copy-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .admin-form .form-copy-btn:active {
@@ -511,13 +568,21 @@
   width: 100%;
   padding: 0 12px;
   border-radius: var(--radius);
-  border: 1px solid var(--color-bg-border);
-  background: transparent;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.5);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   color: var(--color-text-primary);
   outline: none;
-  transition: border-color 150ms ease;
+  transition: all 150ms ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.dark .admin-form .form-input,
+.dark .admin-form .form-select,
+.dark .admin-form .form-textarea {
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .admin-form .form-input,
@@ -558,8 +623,8 @@
 
 .admin-submit-btn {
   width: 100%;
-  height: 40px;
-  background: var(--color-accent);
+  height: 44px;
+  background: linear-gradient(135deg, #3F3F46 0%, #71717A 100%);
   color: #fff;
   border: none;
   border-radius: var(--radius);
@@ -573,6 +638,12 @@
   gap: 8px;
   transition: all 150ms ease;
   margin-bottom: 16px;
+  box-shadow: 0 8px 16px rgba(63, 63, 70, 0.25);
+}
+
+.dark .admin-submit-btn {
+  background: linear-gradient(135deg, #27272A 0%, #52525B 100%);
+  box-shadow: 0 8px 16px rgba(39, 39, 42, 0.3);
 }
 
 .admin-submit-btn:hover:not(:disabled) {
@@ -598,8 +669,14 @@
 .skeleton-card {
   height: 72px;
   border-radius: var(--radius);
-  background: var(--color-bg-elevated);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.dark .skeleton-card {
+  background: rgba(15, 20, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 @keyframes fadeUp {

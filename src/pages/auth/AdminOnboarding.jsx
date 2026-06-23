@@ -39,7 +39,7 @@ export default function AdminOnboarding() {
           <p className="onboarding-subtitle" style={{ marginBottom: 20 }}>
             Your admin access request has been submitted. Please wait for an existing admin to approve it.
           </p>
-          <button className="onboarding-submit" onClick={async () => {
+          <button className="onboarding-submit onboarding-submit--admin" onClick={async () => {
             await signOut(auth)
             navigate('/login')
           }}>
@@ -60,7 +60,7 @@ export default function AdminOnboarding() {
           <p className="onboarding-subtitle" style={{ marginBottom: 20 }}>
             Your admin access request was not approved. Contact an existing admin for help.
           </p>
-          <button className="onboarding-submit" onClick={async () => {
+          <button className="onboarding-submit onboarding-submit--admin" onClick={async () => {
             await signOut(auth)
             navigate('/login')
           }}>
@@ -141,7 +141,7 @@ export default function AdminOnboarding() {
 
           {errors.submit && <p className="form-error form-error--box">{errors.submit}</p>}
 
-          <button type="submit" disabled={loading} className="onboarding-submit">
+          <button type="submit" disabled={loading} className="onboarding-submit onboarding-submit--admin">
             {loading ? 'Submitting...' : 'Submit Request →'}
           </button>
         </form>

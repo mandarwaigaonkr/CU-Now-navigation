@@ -28,7 +28,6 @@ export default function CreateEvent() {
     endTime: '',
     description: '',
     status: 'active',
-    targetGroup: 'all',
   })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
@@ -88,7 +87,6 @@ export default function CreateEvent() {
         endTime,
         description: form.description.trim(),
         status: form.status,
-        targetGroup: form.targetGroup === 'all' ? 'all' : parseInt(form.targetGroup),
         createdBy: user.uid,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
