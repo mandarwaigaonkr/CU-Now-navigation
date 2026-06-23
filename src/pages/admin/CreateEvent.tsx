@@ -8,7 +8,7 @@ import { db } from '../../firebase'
 import { useAuth } from '../../hooks/useAuth'
 import { VENUE_LIST, getDefaultDirections } from '../../data/venues'
 import Navbar from '../../components/Navbar'
-import CustomDayPicker from '../../components/CustomDayPicker'
+
 import CustomDatePicker from '../../components/CustomDatePicker'
 import CustomTimePicker from '../../components/CustomTimePicker'
 import CustomSelect from '../../components/CustomSelect'

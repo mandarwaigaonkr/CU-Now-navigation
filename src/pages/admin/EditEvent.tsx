@@ -7,7 +7,7 @@ import { doc, getDoc, updateDoc, serverTimestamp, Timestamp } from 'firebase/fir
 import { db } from '../../firebase'
 import { VENUE_LIST, getDefaultDirections } from '../../data/venues'
 import Navbar from '../../components/Navbar'
-import CustomDayPicker from '../../components/CustomDayPicker'
+
 import CustomDatePicker from '../../components/CustomDatePicker'
 import CustomTimePicker from '../../components/CustomTimePicker'
 import CustomSelect from '../../components/CustomSelect'

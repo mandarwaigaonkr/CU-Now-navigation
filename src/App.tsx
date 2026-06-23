@@ -40,6 +40,8 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const CreateEvent = lazy(() => import('./pages/admin/CreateEvent'))
 const EditEvent = lazy(() => import('./pages/admin/EditEvent'))
 
+const CreateNotification = lazy(() => import('./pages/admin/CreateNotification'))
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -94,6 +96,9 @@ export default function App() {
           } />
           <Route path="/admin/create-event" element={
             <AdminRoute><CreateEvent /></AdminRoute>
+          } />
+          <Route path="/admin/create-notification" element={
+            <AdminRoute><CreateNotification /></AdminRoute>
           } />
           <Route path="/admin/edit-event/:eventId" element={
             <AdminRoute><EditEvent /></AdminRoute>

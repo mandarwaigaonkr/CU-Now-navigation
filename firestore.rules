@@ -52,6 +52,15 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // ---- Notifications Collection ----
+    match /notifications/{notificationId} {
+      // All authenticated users can read notifications
+      allow read: if isAuthenticated();
+
+      // Only admins can manage notifications
+      allow create, update, delete: if isAdmin();
+    }
+
     // ---- App Config (group mappings, etc.) ----
     match /appConfig/{configId} {
       // All authenticated users can read config (needed for group filtering)

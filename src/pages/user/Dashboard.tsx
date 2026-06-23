@@ -9,6 +9,7 @@ import { formatTime, getCountdown } from '../../utils/formatters'
 import { getVenueByName, Venue } from '../../data/venues'
 import VenueDirections from '../../components/VenueDirections'
 import christLogo from '../../assets/christ-logo.png'
+import NotificationsPopover from '../../components/NotificationsPopover'
 import './Dashboard.css'
 
 interface SelectedVenueEvent {
@@ -22,6 +23,8 @@ export default function Dashboard() {
   const { events, loading } = useEvents()
   const [now, setNow] = useState(new Date())
   const [selectedVenueEvent, setSelectedVenueEvent] = useState<SelectedVenueEvent | null>(null)
+  const [showNotifications, setShowNotifications] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
 
   // Live clock — update every 30 seconds
   useEffect(() => {
@@ -51,10 +54,6 @@ export default function Dashboard() {
 
   const firstName = user?.displayName?.split(' ')[0] || 'there'
 
-  // Day of week display
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  const todayName = dayNames[now.getDay()]
-
   return (
     <div className="dashboard-page page-transition">
       {/* Header */}
@@ -70,12 +69,32 @@ export default function Dashboard() {
             )}
             <div>
               <h1 className="dashboard-greeting">Hey, {firstName}</h1>
-              <p className="dashboard-date">{todayName} · {profile?.role === 'guest' ? 'Guest' : 'Campus Events'}</p>
+              <p className="dashboard-date">your campus companion</p>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative' }}>
             <img src={christLogo} alt="Christ" className="dashboard-logo" />
+            <button 
+              className="dashboard-notification-btn" 
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowNotifications(!showNotifications)
+              }}
+              aria-label="Notifications"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+              {unreadCount > 0 && <span className="dashboard-notification-badge" />}
+            </button>
+
+            {showNotifications && (
+              <NotificationsPopover 
+                onClose={() => setShowNotifications(false)} 
+                onUnreadCountChange={setUnreadCount}
+              />
+            )}
           </div>
         </div>
       </div>
