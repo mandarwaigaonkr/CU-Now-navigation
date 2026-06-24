@@ -44,6 +44,7 @@
 
 .blocks-container {
   padding: 20px;
+  padding-bottom: 100px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -145,6 +146,14 @@
   color: var(--color-text-muted);
   font-style: italic;
   margin: 0;
+}
+
+.block-card__description {
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+  font-style: italic;
 }
 
 .block-card__subtitle {
