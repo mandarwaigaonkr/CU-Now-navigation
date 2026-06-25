@@ -139,6 +139,34 @@ const VENUES: Venue[] = [
     image: '/venues/amphi_theater_rotated.JPG',
     defaultDirections: 'Located centrally on campus.',
   },
+  {
+    id: 'basketball-court',
+    name: 'Basketball Court',
+    block: 'Basketball Court',
+    image: '/venues/b_court.jfif',
+    defaultDirections: 'Located near the sports facilities on campus.',
+  },
+  {
+    id: 'main-ground',
+    name: 'Main Ground',
+    block: 'Main Ground',
+    image: '/venues/main ground.jfif',
+    defaultDirections: 'The main ground of the campus.',
+  },
+  {
+    id: 'car-parking',
+    name: 'Car Parking',
+    block: 'Car Parking',
+    image: '/venues/parking_car.jfif',
+    defaultDirections: 'The designated car parking area.',
+  },
+  {
+    id: 'bike-parking',
+    name: 'Bike Parking',
+    block: 'Bike Parking',
+    image: '/venues/bike_parking.jfif',
+    defaultDirections: 'The designated bike parking area.',
+  },
 ]
 
 /**
