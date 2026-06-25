@@ -70,7 +70,7 @@ export default function Schedule() {
   }
 
   return (
-    <div className="schedule-page page-transition">
+    <div className="schedule-page">
       {/* Header */}
       <div className="schedule-header">
         <div className="schedule-header__inner">

@@ -55,7 +55,7 @@ export default function Dashboard() {
   const firstName = user?.displayName?.split(' ')[0] || 'there'
 
   return (
-    <div className="dashboard-page page-transition">
+    <div className="dashboard-page">
       {/* Header */}
       <div className="dashboard-header">
         <div className="dashboard-header__inner">

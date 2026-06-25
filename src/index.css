@@ -228,3 +228,53 @@ button:active {
     transition-duration: 1ms !important;
   }
 }
+
+/* ---- Telegram-style View Transitions ---- */
+/* Enable view transitions for the main content area */
+.main-content {
+  view-transition-name: main-content;
+}
+
+/* Base animation setup */
+::view-transition-old(main-content),
+::view-transition-new(main-content) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+  animation-fill-mode: both;
+}
+
+/* Slide Left (Navigating to a tab on the right) */
+html[data-direction="left"] ::view-transition-old(main-content) {
+  animation-name: slide-out-left;
+}
+html[data-direction="left"] ::view-transition-new(main-content) {
+  animation-name: slide-in-from-right;
+}
+
+/* Slide Right (Navigating to a tab on the left) */
+html[data-direction="right"] ::view-transition-old(main-content) {
+  animation-name: slide-out-right;
+}
+html[data-direction="right"] ::view-transition-new(main-content) {
+  animation-name: slide-in-from-left;
+}
+
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-out-left {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-30%); opacity: 0; }
+}
+
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-out-right {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(30%); opacity: 0; }
+}
