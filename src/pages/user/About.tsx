@@ -7,11 +7,11 @@ const ADDITIONAL_FACILITIES: Record<string, string[]> = {
   '1st Block': ['Admission Office', 'Director\'s Office', 'Office of International Affairs', 'Block 1 Audi', 'University Media Team'],
   '2nd Block': ['SWO Office'],
   '3rd Block': ['CAPS Office', 'Sports Department', 'Choir'],
-  '4th Block': ['Stationery', 'Indoor Canteens', 'Gym', 'Library', 'CADS Lab', 'Lathe Lab'],
-  '5th Block': ['IEEE Office', 'IIIC Office', 'Office of Examination', 'Psychology Labs'],
-  '6th Block': ['Physics Labs'],
+  '4th Block': ['Stationery', 'Indoor Canteens', 'Gym', 'Library'],
+  '5th Block': ['IEEE Office', 'IIIC Office', 'Office of Examination'],
+  '6th Block': [],
   'PU Block': ['A residential college focusing on international standards curriculum for pre-university'],
-  'Architecture Block': ['workshop classrooms', 'CICF Office', 'crystal block (a high end fully modern computer lab)', 'conference room'],
+  'Architecture Block': ['workshop classrooms', 'CICF Office', 'crystal block', 'conference room'],
   'Devdan Block': ['Boys hostel', 'North canteen (pure Veg)', 'civil block', 'ardc office', 'work-integrated classrooms'],
   'Amphitheater': []
 }
