@@ -106,7 +106,7 @@ export default function About() {
   }, [])
 
   return (
-    <div className="about-page page-transition">
+    <div className="about-page">
       <header className="about-header">
         <h1>Know Your Campus</h1>
         <p>in a fun and elegant way</p>

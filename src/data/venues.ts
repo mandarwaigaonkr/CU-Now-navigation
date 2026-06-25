@@ -122,7 +122,7 @@ const VENUES: Venue[] = [
     id: 'arch-block',
     name: 'Architecture Block',
     block: 'Architecture Block',
-    image: '/venues/arch_block.JPG',
+    image: '/venues/arch_block_fixed.JPG',
     defaultDirections: 'Follow the signs on campus for the Architecture Block.',
   },
   {
@@ -136,7 +136,7 @@ const VENUES: Venue[] = [
     id: 'amphitheater',
     name: 'Amphitheater',
     block: 'Amphitheater',
-    image: '/venues/amphi_theater.JPG',
+    image: '/venues/amphi_theater_rotated.JPG',
     defaultDirections: 'Located centrally on campus.',
   },
 ]
