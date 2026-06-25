@@ -66,7 +66,7 @@ const VENUES: Venue[] = [
     id: 'cse-lab',
     name: 'CSE Lab Visit',
     block: '2nd Block',
-    image: '/venues/second_block.jpg',
+    image: '/venues/second_block.JPG',
     defaultDirections:
       'From the Main Gate, walk along the main road. The 2nd Block is the second building on your left, near the open auditorium. The CSE Lab is inside the 2nd Block.',
   },
@@ -74,7 +74,7 @@ const VENUES: Venue[] = [
     id: 'ece-lab',
     name: 'ECE Lab',
     block: '2nd Block',
-    image: '/venues/second_block.jpg',
+    image: '/venues/second_block.JPG',
     defaultDirections:
       'From the Main Gate, walk along the main road. The 2nd Block is the second building on your left, near the open auditorium. The ECE Lab is inside the 2nd Block.',
   },
@@ -117,6 +117,27 @@ const VENUES: Venue[] = [
     image: '/venues/open_audi.png',
     defaultDirections:
       'From the Main Gate, walk along the main road. The Open Auditorium is located near the 2nd Block on the left side of the campus.',
+  },
+  {
+    id: 'arch-block',
+    name: 'Architecture Block',
+    block: 'Architecture Block',
+    image: '/venues/arch_block.JPG',
+    defaultDirections: 'Follow the signs on campus for the Architecture Block.',
+  },
+  {
+    id: 'devdan-block',
+    name: 'Devdan Block',
+    block: 'Devdan Block',
+    image: '/venues/Devdan_block.DNG',
+    defaultDirections: 'Follow the signs on campus for the Devdan Block.',
+  },
+  {
+    id: 'amphitheater',
+    name: 'Amphitheater',
+    block: 'Amphitheater',
+    image: '/venues/amphi_theater.JPG',
+    defaultDirections: 'Located centrally on campus.',
   },
 ]
 

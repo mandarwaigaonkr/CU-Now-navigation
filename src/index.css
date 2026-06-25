@@ -11,17 +11,17 @@
   --color-bg-elevated: #F4F4F5; /* zinc-100 */
   --color-bg-border: #E4E4E7; /* zinc-200 */
 
-  /* DevS Reference Orange Accent */
-  --color-accent: #FF5222;
-  --color-accent-light: #FD6E32;
-  --color-accent-dark: #F64617;
-  --color-accent-dim: rgba(255, 82, 34, 0.06);
-  --color-accent-glow: rgba(255, 82, 34, 0.12);
+  /* Modern Emerald Green Accent */
+  --color-accent: #10B981;
+  --color-accent-light: #34D399;
+  --color-accent-dark: #059669;
+  --color-accent-dim: rgba(16, 185, 129, 0.06);
+  --color-accent-glow: rgba(16, 185, 129, 0.12);
 
-  /* Secondary Blue from DevS */
-  --color-secondary: #3A63FA;
-  --color-secondary-light: #7190FF;
-  --color-secondary-dark: #1747F6;
+  /* Secondary Violet */
+  --color-secondary: #8B5CF6;
+  --color-secondary-light: #A78BFA;
+  --color-secondary-dark: #7C3AED;
 
   --color-text-primary: #18181B; /* zinc-900 */
   --color-text-secondary: #71717A; /* zinc-500 */
@@ -40,7 +40,7 @@
   --r-pill: 999px;
 
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-  --shadow-orange: 0 8px 24px rgba(246, 70, 23, 0.2);
+  --shadow-accent: 0 8px 24px rgba(16, 185, 129, 0.2);
 
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
   --dur: 0.3s;
@@ -54,10 +54,10 @@
   --color-bg-elevated: #222224;
   --color-bg-border: #2E2E32;
 
-  --color-accent: #FF5222;
-  --color-accent-light: #FD6E32;
-  --color-accent-dim: rgba(255, 82, 34, 0.12);
-  --color-accent-glow: rgba(255, 82, 34, 0.25);
+  --color-accent: #10B981;
+  --color-accent-light: #34D399;
+  --color-accent-dim: rgba(16, 185, 129, 0.12);
+  --color-accent-glow: rgba(16, 185, 129, 0.25);
 
   --color-text-primary: #EDEDEF;
   --color-text-secondary: #A0A0A5;

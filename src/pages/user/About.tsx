@@ -10,7 +10,16 @@ const ADDITIONAL_FACILITIES: Record<string, string[]> = {
   'Block 4': ['Stationery', 'Indoor Canteens', 'Gym', 'Library', 'CADS Lab', 'Lathe Lab'],
   '5th Block': ['IEEE Office', 'IIIC Office', 'Office of Examination', 'Psychology Labs'],
   '6th Block': ['Physics Labs'],
-  'PU Block': ['A residential college focusing on international standards curriculum for pre-university']
+  'PU Block': ['A residential college focusing on international standards curriculum for pre-university'],
+  'Architecture Block': ['workshop classrooms', 'CICF Office', 'crystal block (a high end fully modern computer lab)', 'conference room'],
+  'Devdan Block': ['Boys hostel', 'North canteen (pure Veg)', 'civil block', 'ardc office', 'work-integrated classrooms'],
+  'Amphitheater': []
+}
+
+const BLOCK_DESCRIPTIONS: Record<string, string> = {
+  'Architecture Block': 'A modern infrastructure design by alumni of the architecture field, known for magnificent class rooms, workshops etc.',
+  'Devdan Block': 'A residential boys hostel.',
+  'Amphitheater': 'A vibrant nature spot surrounded by lush green ambiance #naturelovers'
 }
 
 interface BlockData {
@@ -75,7 +84,10 @@ export default function About() {
       'Block 4',
       '5th Block',
       '6th Block',
-      'PU Block'
+      'PU Block',
+      'Architecture Block',
+      'Devdan Block',
+      'Amphitheater'
     ]
 
     // Sort based on the custom order
@@ -121,20 +133,27 @@ export default function About() {
                 </div>
                 
                 <div className={`block-card__expanded-content ${isExpanded ? 'open' : ''}`}>
-                  {block.facilities.length > 0 ? (
+                  {(block.facilities.length > 0 || BLOCK_DESCRIPTIONS[block.name]) ? (
                     <div className="block-card__content">
-                      <h3 className="block-card__subtitle">Facilities & Labs</h3>
-                      <ul className="block-card__list">
-                        {block.facilities.map((facility, i) => (
-                          <li key={i} className="block-card__list-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="list-icon">
-                              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                              <polyline points="22 4 12 14.01 9 11.01" />
-                            </svg>
-                            {facility}
-                          </li>
-                        ))}
-                      </ul>
+                      {BLOCK_DESCRIPTIONS[block.name] && (
+                        <p className="block-card__description">{BLOCK_DESCRIPTIONS[block.name]}</p>
+                      )}
+                      {block.facilities.length > 0 && (
+                        <>
+                          <h3 className="block-card__subtitle">Facilities & Labs</h3>
+                          <ul className="block-card__list">
+                            {block.facilities.map((facility, i) => (
+                              <li key={i} className="block-card__list-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="list-icon">
+                                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                  <polyline points="22 4 12 14.01 9 11.01" />
+                                </svg>
+                                {facility}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                     </div>
                   ) : (
                     <div className="block-card__content">
