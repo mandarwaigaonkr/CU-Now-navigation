@@ -1,6 +1,8 @@
 // src/components/VenueDirections.tsx
 // Bottom-sheet modal showing venue image and directions
 
+import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import './VenueDirections.css'
 import { Venue } from '../data/venues'
 
@@ -11,14 +13,23 @@ interface VenueDirectionsProps {
 }
 
 export default function VenueDirections({ venue, directions, onClose }: VenueDirectionsProps) {
+  useEffect(() => {
+    // Lock body scroll to prevent app getting stuck
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [])
+
   if (!venue) return null
 
   // Use custom admin-provided directions, or fall back to default
   const displayDirections = directions || venue.defaultDirections || ''
 
-  return (
+  const content = (
     <div className="venue-backdrop" onClick={onClose}>
       <div className="venue-sheet" onClick={e => e.stopPropagation()}>
+        <div className="venue-sheet__handle" />
         {/* Header */}
         <div className="venue-sheet__header">
           <div>
@@ -60,4 +71,6 @@ export default function VenueDirections({ venue, directions, onClose }: VenueDir
       </div>
     </div>
   )
+
+  return createPortal(content, document.body)
 }

@@ -66,7 +66,7 @@ const VENUES: Venue[] = [
     id: 'cse-lab',
     name: 'CSE Lab Visit',
     block: '2nd Block',
-    image: '/venues/second_block.JPG',
+    image: '/venues/second_block.jpg',
     defaultDirections:
       'From the Main Gate, walk along the main road. The 2nd Block is the second building on your left, near the open auditorium. The CSE Lab is inside the 2nd Block.',
   },
@@ -74,7 +74,7 @@ const VENUES: Venue[] = [
     id: 'ece-lab',
     name: 'ECE Lab',
     block: '2nd Block',
-    image: '/venues/second_block.JPG',
+    image: '/venues/second_block.jpg',
     defaultDirections:
       'From the Main Gate, walk along the main road. The 2nd Block is the second building on your left, near the open auditorium. The ECE Lab is inside the 2nd Block.',
   },
@@ -129,7 +129,7 @@ const VENUES: Venue[] = [
     id: 'devdan-block',
     name: 'Devdan Block',
     block: 'Devdan Block',
-    image: '/venues/Devdan_block.DNG',
+    image: '/venues/Devdan_block.jpg',
     defaultDirections: 'Follow the signs on campus for the Devdan Block.',
   },
   {
