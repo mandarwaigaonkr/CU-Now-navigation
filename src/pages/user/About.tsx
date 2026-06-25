@@ -13,13 +13,27 @@ const ADDITIONAL_FACILITIES: Record<string, string[]> = {
   'PU Block': ['A residential college focusing on international standards curriculum for pre-university'],
   'Architecture Block': ['workshop classrooms', 'CICF Office', 'crystal block', 'conference room'],
   'Devdan Block': ['Boys hostel', 'North canteen (pure Veg)', 'civil block', 'ardc office', 'work-integrated classrooms'],
-  'Amphitheater': []
+  'Amphitheater': [],
+  'Main Ground': [],
+  'Basketball Court': [],
+  'Car Parking': [],
+  'Bike Parking': []
 }
 
 const BLOCK_DESCRIPTIONS: Record<string, string> = {
+  '1st Block': "Block 1 serves as a key administrative and academic center of the university, housing MBA classrooms, the Admission Office, Director's Office, and other administrative departments. The block also features chemistry laboratories, the university's official media room, and a spacious auditorium that hosts various academic and institutional events.",
+  '2nd Block': "Block 2 is a major academic hub catering primarily to second, third, and fourth-year students across various departments. The block houses the Dean's and Associate Dean's offices, the Student Welfare Office, and state-of-the-art laboratories for Computer Science and Electronics, providing a comprehensive environment for learning, innovation, and student support.",
+  '3rd Block': "Block 3 is a center for innovation and advanced learning, featuring cutting-edge laboratories for Electronics, Machine Learning, and specialized research equipment. The block also houses CAPS (Centre for Academic and Professional Support), the Sports Department, a modern music room, and an auditorium, making it a vibrant space for academic, professional, and extracurricular development.",
+  '4th Block': "Block 4 serves as the university's recreational and student activity hub, featuring a variety of canteens and popular food outlets. The block also includes a stationery store, a well-equipped gymnasium, dedicated dance and table tennis rooms, and a library with an extensive collection of books, offering students a balanced environment for learning and leisure.",
+  '5th Block': "Block 5 is a hub for research, innovation, and interdisciplinary learning. It houses the Centre of Excellence, featuring advanced research laboratories supported by industry leaders such as Samsung, Cisco, and Intel. The block also accommodates Psychology and BBA classrooms, the Industry-Institute Cell (IIC), and specialized laboratories dedicated to human psychology research and development.",
+  '6th Block': "6th Block is the center for Automobile and Mechanical Engineering, offering students hands-on learning through advanced workshops, garages, and modern laboratories. The block features a dedicated BharatBenz truck training facility, state-of-the-art Mechanical and Physics labs, and AI-enabled equipment that supports practical learning, research, and innovation.",
   'Architecture Block': 'A modern infrastructure design by alumni of the architecture field, known for magnificent class rooms, workshops etc.',
   'Devdan Block': 'A residential boys hostel.',
-  'Amphitheater': 'A vibrant nature spot surrounded by lush green ambiance #naturelovers'
+  'Amphitheater': 'A vibrant nature spot surrounded by lush green ambiance #naturelovers',
+  'Main Ground': 'The main ground of the campus, used for large outdoor events and sports.',
+  'Basketball Court': 'Located near the sports facilities, open for all students.',
+  'Car Parking': 'The designated car parking area for staff and visitors.',
+  'Bike Parking': 'The designated bike parking area for students and staff.'
 }
 
 interface BlockData {
@@ -87,7 +101,11 @@ export default function About() {
     // Add additional facilities and ensure all blocks exist
     const imageFallbacks: Record<string, string> = {
       '1st Block': '/venues/first_block.jpeg',
-      '4th Block': '/venues/fourth_block.jpg'
+      '4th Block': '/venues/fourth_block.jpg',
+      'Main Ground': '/venues/main ground.jfif',
+      'Basketball Court': '/venues/b_court.jfif',
+      'Car Parking': '/venues/parking_car.jfif',
+      'Bike Parking': '/venues/bike_parking.jfif'
     }
 
     Object.keys(ADDITIONAL_FACILITIES).forEach(blockKey => {
@@ -119,8 +137,12 @@ export default function About() {
       '6th Block',
       'PU Block',
       'Architecture Block',
+      'Amphitheater',
       'Devdan Block',
-      'Amphitheater'
+      'Main Ground',
+      'Basketball Court',
+      'Car Parking',
+      'Bike Parking'
     ]
 
     // Sort based on the custom order
@@ -187,7 +209,7 @@ export default function About() {
                           )}
                           {block.facilities.length > 0 && (
                             <>
-                              <h4 className="block-card__subtitle">Facilities & Labs</h4>
+                              <h4 className="block-card__subtitle">Facilities</h4>
                               <ul className="block-card__list">
                                 {block.facilities.map((facility, i) => (
                                   <li key={i} className="block-card__list-item">
