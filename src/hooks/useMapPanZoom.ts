@@ -41,7 +41,7 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
     if (!vp) return metricsRef.current
     const vpW = vp.clientWidth
     const vpH = vp.clientHeight
-    const mapSize = Math.min(vpW, vpH)
+    const mapSize = Math.max(vpW, vpH)
     metricsRef.current = { mapSize, vpW, vpH }
     return metricsRef.current
   }, [viewportRef])

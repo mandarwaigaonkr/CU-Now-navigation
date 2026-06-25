@@ -3,91 +3,56 @@
 .map-navigation-page {
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - 100px);
-  max-height: calc(100dvh - 100px);
+  height: calc(100dvh - 84px);
+  max-height: calc(100dvh - 84px);
   overflow: hidden;
-  padding: 0 12px 12px;
+  padding: 16px;
+  gap: 16px;
   background: var(--color-bg-base-solid);
 }
 
-/* Header */
-.map-navigation-header {
+.map-navigation-top-bar {
   flex-shrink: 0;
-  margin: 0 -12px;
-  background: var(--color-bg-card);
-  border-bottom: 1px solid var(--color-bg-border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--color-bg-elevated);
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--color-bg-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.map-navigation-header__inner {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.dark .map-navigation-top-bar {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .map-navigation-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--color-text-primary);
-  line-height: 1.2;
+  margin: 0;
 }
 
-.map-navigation-subtitle {
-  font-size: 12px;
-  color: var(--color-text-muted);
-  margin-top: 2px;
+.map-navigation-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.map-navigation-toggle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.map-navigation-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-bg-base);
+  padding: 4px 12px 4px 16px;
+  border-radius: 12px;
   border: 1px solid var(--color-bg-border);
-  background: var(--color-bg-elevated);
-  color: var(--color-text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.map-navigation-toggle:hover {
-  background: var(--color-bg-border);
-  color: var(--color-text-primary);
-}
-
-/* Direction panel */
-.map-navigation-panel {
-  flex-shrink: 0;
-  padding: 12px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  animation: panelSlideIn 0.25s var(--ease-soft) both;
-}
-
-@keyframes panelSlideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.map-navigation-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.map-navigation-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-secondary);
+/* CustomSelect wrapper needs to grow to fill space */
+.map-navigation-input-row > :nth-child(2) {
+  flex: 1;
 }
 
 .map-navigation-dot {
@@ -110,13 +75,12 @@
 .map-navigation-actions {
   display: flex;
   gap: 8px;
-  margin-top: 4px;
 }
 
 .map-navigation-btn {
   flex: 1;
   height: 44px;
-  border-radius: var(--r-sm);
+  border-radius: 12px;
   border: none;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
@@ -133,11 +97,10 @@
 .map-navigation-btn--primary {
   background: var(--color-accent);
   color: #fff;
-  box-shadow: var(--shadow-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dark .map-navigation-btn--primary {
-  background: var(--color-accent);
   color: var(--color-accent-dark);
 }
 
@@ -152,8 +115,8 @@
 
 .map-navigation-btn--ghost {
   flex: 0 0 auto;
-  padding: 0 16px;
-  background: var(--color-bg-elevated);
+  padding: 0 20px;
+  background: var(--color-bg-base);
   border: 1px solid var(--color-bg-border);
   color: var(--color-text-secondary);
 }
@@ -161,4 +124,19 @@
 .map-navigation-btn--ghost:hover {
   background: var(--color-bg-border);
   color: var(--color-text-primary);
+}
+
+.map-navigation-map-wrapper {
+  flex: 1;
+  min-height: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--color-bg-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  position: relative;
+  background: #0a0a0c;
+}
+
+.dark .map-navigation-map-wrapper {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }

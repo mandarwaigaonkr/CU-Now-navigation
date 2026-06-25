@@ -235,10 +235,10 @@ export default function CampusMap({
                   <circle
                     cx={wp.x}
                     cy={wp.y}
-                    r={selectedWpId === wp.id ? 0.012 : 0.008}
+                    r={selectedWpId === wp.id ? 0.006 : 0.003}
                     className={`campus-map__waypoint-dot ${selectedWpId === wp.id ? 'campus-map__waypoint-dot--selected' : ''}`}
                   />
-                  <text x={wp.x + 0.012} y={wp.y - 0.01} className="campus-map__waypoint-label">
+                  <text x={wp.x + 0.006} y={wp.y - 0.004} className="campus-map__waypoint-label">
                     {wp.id}
                   </text>
                 </g>
@@ -249,12 +249,12 @@ export default function CampusMap({
                   <circle
                     cx={pos.x}
                     cy={pos.y}
-                    r={0.006}
+                    r={0.003}
                     fill="#F87171"
                     stroke="#fff"
-                    strokeWidth="0.002"
+                    strokeWidth="0.001"
                   />
-                  <text x={pos.x + 0.01} y={pos.y + 0.003} fill="#F87171" fontSize="0.012" fontWeight="600" style={{ pointerEvents: 'none', textShadow: '0 0 4px #000, 0 0 4px #000' }}>
+                  <text x={pos.x + 0.005} y={pos.y + 0.002} fill="#F87171" fontSize="0.006" fontWeight="600" style={{ pointerEvents: 'none', textShadow: '0 0 2px #000, 0 0 2px #000' }}>
                     {id.split('-').join(' ')}
                   </text>
                 </g>
@@ -298,14 +298,6 @@ export default function CampusMap({
             )}
           </div>
 
-          <div className="campus-map__vignette" />
-        </div>
-
-        <div className="campus-map__hud">
-          <div className="campus-map__hud-corner campus-map__hud-corner--tl" />
-          <div className="campus-map__hud-corner campus-map__hud-corner--tr" />
-          <div className="campus-map__hud-corner campus-map__hud-corner--bl" />
-          <div className="campus-map__hud-corner campus-map__hud-corner--br" />
         </div>
 
         <div className="campus-map__controls">
