@@ -4,10 +4,10 @@ import Navbar from '../../components/Navbar'
 import './About.css'
 
 const ADDITIONAL_FACILITIES: Record<string, string[]> = {
-  'Block 1': ['Admission Office', 'Director\'s Office', 'Office of International Affairs', 'Block 1 Audi', 'University Media Team'],
+  '1st Block': ['Admission Office', 'Director\'s Office', 'Office of International Affairs', 'Block 1 Audi', 'University Media Team'],
   '2nd Block': ['SWO Office'],
   '3rd Block': ['CAPS Office', 'Sports Department', 'Choir'],
-  'Block 4': ['Stationery', 'Indoor Canteens', 'Gym', 'Library', 'CADS Lab', 'Lathe Lab'],
+  '4th Block': ['Stationery', 'Indoor Canteens', 'Gym', 'Library', 'CADS Lab', 'Lathe Lab'],
   '5th Block': ['IEEE Office', 'IIIC Office', 'Office of Examination', 'Psychology Labs'],
   '6th Block': ['Physics Labs'],
   'PU Block': ['A residential college focusing on international standards curriculum for pre-university'],
@@ -29,9 +29,9 @@ interface BlockData {
 }
 
 const SECTIONS = [
-  { id: 'facilities', title: '📍 Facilities', content: null },
-  { id: 'directory', title: '📞 College Directory', content: 'Important contact information for various departments and faculty members.' },
-  { id: 'rules', title: '📋 Rules & Regulations', content: `The Student Code of Conduct at CHRIST (Deemed to be University) aims to maintain a respectful, disciplined, and academically responsible campus environment. Students are expected to uphold the university's values, follow institutional regulations, and contribute positively to the campus community.
+  { id: 'facilities', title: 'Facilities', content: null },
+  { id: 'directory', title: 'College Directory', content: 'Important contact information for various departments and faculty members.' },
+  { id: 'rules', title: 'Rules & Regulations', content: `The Student Code of Conduct at CHRIST (Deemed to be University) aims to maintain a respectful, disciplined, and academically responsible campus environment. Students are expected to uphold the university's values, follow institutional regulations, and contribute positively to the campus community.
 
 ## Key Expectations
 • Maintain discipline, decorum, and respect for faculty, staff, and fellow students.
@@ -86,7 +86,8 @@ export default function About() {
 
     // Add additional facilities and ensure all blocks exist
     const imageFallbacks: Record<string, string> = {
-      'Block 4': '/venues/fourth_block.jpg'
+      '1st Block': '/venues/first_block.jpeg',
+      '4th Block': '/venues/fourth_block.jpg'
     }
 
     Object.keys(ADDITIONAL_FACILITIES).forEach(blockKey => {
@@ -109,11 +110,11 @@ export default function About() {
 
     // Define the custom order requested
     const customOrder = [
-      'Block 1',
+      '1st Block',
       '2nd Block',
       'Open Auditorium',
       '3rd Block',
-      'Block 4',
+      '4th Block',
       '5th Block',
       '6th Block',
       'PU Block',
