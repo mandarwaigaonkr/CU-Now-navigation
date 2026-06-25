@@ -11,7 +11,6 @@
   flex-shrink: 0;
   z-index: 40;
   background: var(--color-bg-card);
-  border-bottom: 1px solid var(--color-bg-border);
   padding: 20px;
 }
 
@@ -44,7 +43,6 @@
 
 .blocks-container {
   padding: 20px;
-  padding-bottom: 100px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -185,9 +183,116 @@
 
 .list-icon {
   flex-shrink: 0;
-  color: var(--color-primary);
+  color: var(--color-accent);
   opacity: 0.8;
 }
+
+/* Tab Navigation */
+.about-tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 0 20px 16px;
+  background: var(--color-bg-card);
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+.about-tabs::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.about-tab {
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-bg-border);
+  color: var(--color-text-secondary);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.about-tab:hover {
+  background: var(--color-bg-hover);
+}
+
+.about-tab.active {
+  background: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px var(--color-accent-glow);
+}
+
+.about-tab-content {
+  animation: fadeIn 0.3s ease;
+  padding-bottom: 120px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.placeholder-content {
+  padding: 24px 20px;
+}
+
+.content-box {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-bg-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dark .content-box {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.content-heading {
+  margin: 24px 0 12px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.content-heading:first-child {
+  margin-top: 0;
+}
+
+.content-body {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.content-bullet {
+  display: flex;
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.bullet-point {
+  color: var(--color-accent);
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.content-spacer {
+  height: 12px;
+}
+
 
 /* Responsive Grid for larger screens */
 @media (min-width: 768px) {
