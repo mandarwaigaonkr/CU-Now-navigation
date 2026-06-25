@@ -236,14 +236,13 @@
 }
 
 .onboarding-role-badge--guest {
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(51, 65, 85, 0.1);
+  color: #334155;
+  border: 1px solid rgba(71, 85, 105, 0.2);
 }
 
 .dark .onboarding-role-badge--guest {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34D399;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(148, 163, 184, 0.15);
+  color: #94A3B8;
+  border: 1px solid rgba(148, 163, 184, 0.25);
 }
-

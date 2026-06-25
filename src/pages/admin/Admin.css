@@ -297,10 +297,10 @@
 }
 
 .admin-approval-btn--approve {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #334155 0%, #64748B 100%);
   color: #fff;
   border: none;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.2);
 }
 
 .admin-approval-btn--approve:hover {
@@ -747,7 +747,7 @@
 
 .mg-summary-dot--g1 { background: #6366f1; }
 .mg-summary-dot--g2 { background: #f59e0b; }
-.mg-summary-dot--g3 { background: #10b981; }
+.mg-summary-dot--g3 { background: #64748B; }
 
 .mg-summary-info {
   flex: 1;
@@ -876,14 +876,14 @@
 }
 
 .mg-group-btn--g3.mg-group-btn--active {
-  border-color: #10b981;
-  background: #10b981;
+  border-color: #64748B;
+  background: #64748B;
   color: #fff;
 }
 
 .mg-group-btn--g1:not(.mg-group-btn--active):hover { border-color: #6366f1; color: #6366f1; }
 .mg-group-btn--g2:not(.mg-group-btn--active):hover { border-color: #f59e0b; color: #f59e0b; }
-.mg-group-btn--g3:not(.mg-group-btn--active):hover { border-color: #10b981; color: #10b981; }
+.mg-group-btn--g3:not(.mg-group-btn--active):hover { border-color: #64748B; color: #64748B; }
 
 /* Actions */
 .mg-actions {

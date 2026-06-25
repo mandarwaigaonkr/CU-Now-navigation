@@ -11,12 +11,12 @@
   --color-bg-elevated: #F4F4F5; /* zinc-100 */
   --color-bg-border: #E4E4E7; /* zinc-200 */
 
-  /* Modern Emerald Green Accent */
-  --color-accent: #10B981;
-  --color-accent-light: #34D399;
-  --color-accent-dark: #059669;
-  --color-accent-dim: rgba(16, 185, 129, 0.06);
-  --color-accent-glow: rgba(16, 185, 129, 0.12);
+  /* Aesthetic Slate/Gray-Blue Accent */
+  --color-accent: #334155;
+  --color-accent-light: #64748B;
+  --color-accent-dark: #0F172A;
+  --color-accent-dim: rgba(51, 65, 85, 0.08);
+  --color-accent-glow: rgba(51, 65, 85, 0.15);
 
   /* Secondary Violet */
   --color-secondary: #8B5CF6;
@@ -40,7 +40,7 @@
   --r-pill: 999px;
 
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-  --shadow-accent: 0 8px 24px rgba(16, 185, 129, 0.2);
+  --shadow-accent: 0 8px 24px rgba(51, 65, 85, 0.25);
 
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
   --dur: 0.3s;
@@ -54,10 +54,10 @@
   --color-bg-elevated: #222224;
   --color-bg-border: #2E2E32;
 
-  --color-accent: #10B981;
-  --color-accent-light: #34D399;
-  --color-accent-dim: rgba(16, 185, 129, 0.12);
-  --color-accent-glow: rgba(16, 185, 129, 0.25);
+  --color-accent: #94A3B8;
+  --color-accent-light: #CBD5E1;
+  --color-accent-dim: rgba(148, 163, 184, 0.12);
+  --color-accent-glow: rgba(148, 163, 184, 0.25);
 
   --color-text-primary: #EDEDEF;
   --color-text-secondary: #A0A0A5;
