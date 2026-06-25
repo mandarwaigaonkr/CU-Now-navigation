@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 import toast from 'react-hot-toast'
 import campusMap from '../assets/campus-map.png'
-import { type MapPoint, type Waypoint, WAYPOINTS } from '../data/mapConfig'
+import { type MapPoint, type Waypoint, WAYPOINTS, VENUE_MAP_POSITIONS } from '../data/mapConfig'
 import { useMapPanZoom } from '../hooks/useMapPanZoom'
 import { findRoute, getRouteBounds, pointsToSvgPath } from '../utils/pathfinding'
 import {
@@ -240,6 +240,22 @@ export default function CampusMap({
                   />
                   <text x={wp.x + 0.012} y={wp.y - 0.01} className="campus-map__waypoint-label">
                     {wp.id}
+                  </text>
+                </g>
+              ))}
+
+              {calibrationMode && Object.entries(VENUE_MAP_POSITIONS).map(([id, pos]) => (
+                <g key={`venue-${id}`}>
+                  <circle
+                    cx={pos.x}
+                    cy={pos.y}
+                    r={0.006}
+                    fill="#F87171"
+                    stroke="#fff"
+                    strokeWidth="0.002"
+                  />
+                  <text x={pos.x + 0.01} y={pos.y + 0.003} fill="#F87171" fontSize="0.012" fontWeight="600" style={{ pointerEvents: 'none', textShadow: '0 0 4px #000, 0 0 4px #000' }}>
+                    {id.split('-').join(' ')}
                   </text>
                 </g>
               ))}
