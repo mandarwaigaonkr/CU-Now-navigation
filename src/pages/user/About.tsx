@@ -141,8 +141,8 @@ export default function About() {
   return (
     <div className="about-page">
       <header className="about-header">
-        <h1>Campus Info</h1>
-        <p>Everything you need to know</p>
+        <h1>Welcome to Campus</h1>
+        <p>Your guide to facilities, locations, and essential information</p>
       </header>
 
       <div className="about-tabs">
