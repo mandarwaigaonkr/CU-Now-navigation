@@ -1,0 +1,412 @@
+/* src/components/CampusMap.css — GTA-style campus map */
+
+.campus-map {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.campus-map__frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  contain: layout paint;
+  border: 2px solid var(--color-bg-border);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.35),
+    0 8px 32px rgba(0, 0, 0, 0.15);
+  background: #0a0a0c;
+}
+
+.dark .campus-map__frame {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 0 50px rgba(0, 0, 0, 0.6),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.campus-map__viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  position: relative;
+  container-type: size;
+  isolation: isolate;
+}
+
+.campus-map__viewport:active {
+  cursor: grabbing;
+}
+
+.campus-map__viewport--calibrate {
+  cursor: crosshair;
+}
+
+.campus-map__transform {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.campus-map__image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  border-radius: 2px;
+}
+
+.campus-map__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Route line — GTA glowing path */
+.campus-map__route-glow {
+  fill: none;
+  stroke: url(#route-gradient);
+  stroke-width: 0.025;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.5;
+}
+
+.campus-map__route-line {
+  fill: none;
+  stroke: url(#route-gradient);
+  stroke-width: 0.012;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.campus-map__route-dash {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 0.005;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 0.02 0.03;
+  animation: routeDash 1.2s linear infinite;
+}
+
+@keyframes routeDash {
+  to { stroke-dashoffset: -0.1; }
+}
+
+.campus-map__waypoint-dot {
+  fill: rgba(139, 92, 246, 0.85);
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 0.002;
+}
+
+.campus-map__waypoint-dot--selected {
+  fill: #FBBF24;
+  stroke: #fff;
+  stroke-width: 0.003;
+}
+
+.campus-map__waypoint-label {
+  font-size: 0.028px;
+  fill: #EDE9FE;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.campus-map__road-line {
+  stroke: rgba(167, 139, 250, 0.85);
+  stroke-width: 0.006;
+  stroke-linecap: round;
+}
+
+.campus-map__calib-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 8px 0;
+}
+
+.campus-map__mode-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.campus-map__mode-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: var(--r-xs);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.campus-map__mode-btn--active {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary-light);
+}
+
+.campus-map__chain-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.campus-map__calib-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.campus-map__calib-actions button {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: var(--r-xs);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.campus-map__calib-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.campus-map__calib-marker {
+  fill: #FBBF24;
+  stroke: #fff;
+  stroke-width: 0.003;
+}
+
+.campus-map__calib-label {
+  font-size: 0.035px;
+  fill: #FBBF24;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+/* Pins */
+.campus-map__pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.campus-map__pin-head {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.campus-map__pin--from .campus-map__pin-head {
+  background: #3B82F6;
+}
+
+.campus-map__pin--to .campus-map__pin-head {
+  background: #EF4444;
+}
+
+.campus-map__pin-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  animation: pinPulse 2s ease-out infinite;
+}
+
+.campus-map__pin-pulse--red {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+@keyframes pinPulse {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+/* Vignette overlay */
+.campus-map__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+/* HUD corner brackets */
+.campus-map__hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.campus-map__hud-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: rgba(255, 255, 255, 0.35);
+  border-style: solid;
+}
+
+.campus-map__hud-corner--tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+.campus-map__hud-corner--tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
+.campus-map__hud-corner--bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; }
+.campus-map__hud-corner--br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+
+/* Controls */
+.campus-map__controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 20;
+}
+
+.campus-map__ctrl-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur) var(--ease-soft), transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.campus-map__ctrl-btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.campus-map__ctrl-btn:active {
+  transform: scale(0.92);
+}
+
+.campus-map__ctrl-btn--calibrate {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.campus-map__ctrl-btn--active {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary-light);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.5);
+}
+
+/* Calibration panel */
+.campus-map__calib-panel {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 25;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  color: #fff;
+}
+
+.campus-map__calib-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.campus-map__calib-header button {
+  background: none;
+  border: none;
+  color: var(--color-secondary-light);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.campus-map__calib-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.campus-map__calib-hint code {
+  font-size: 10px;
+  color: #FBBF24;
+}
+
+.campus-map__calib-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campus-map__calib-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.campus-map__calib-list code {
+  color: #FBBF24;
+  font-size: 11px;
+}
+
+.campus-map__calib-list button {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--r-xs);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}

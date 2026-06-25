@@ -87,6 +87,14 @@ const VENUES: Venue[] = [
       'From the Main Gate, walk along the main road. Pass the 1st and 2nd Blocks on your left. The 3rd Block is next. The Auditorium is located inside.',
   },
   {
+    id: 'block-4-audi',
+    name: 'Block 4 Audi',
+    block: 'Block 4',
+    image: '/venues/fourth_block.jpg',
+    defaultDirections:
+      'From the Main Gate, walk along the main road. Pass Blocks 1, 2, and 3. Block 4 is the next building on the route. The Auditorium is located inside.',
+  },
+  {
     id: 'eee-lab',
     name: 'EEE Lab',
     block: '3rd Block',
