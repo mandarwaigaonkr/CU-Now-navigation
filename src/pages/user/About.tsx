@@ -69,6 +69,14 @@ Students are required to comply with all university policies, including regulati
 ## Disciplinary Measures
 Failure to follow the Code of Conduct may lead to disciplinary action. Serious or repeated violations can result in suspension, expulsion, or other penalties as determined by the university.
 
+## Visitor Guidelines
+• All visitors must register at the main security gate upon entry and obtain a valid visitor pass.
+• The visitor pass must be worn and clearly visible at all times while on campus.
+• Visitors should park their vehicles only in the designated visitor or general parking areas.
+• Access is restricted to public areas and specific departments being visited; unauthorized entry into classrooms, labs, or hostels is strictly prohibited.
+• Please maintain a quiet and respectful demeanor to avoid disrupting ongoing academic activities.
+• Visitors must fully cooperate with security personnel and promptly address any queries they may have while on campus.
+
 This code ensures a safe, inclusive, and productive learning environment while promoting academic excellence, integrity, and responsible citizenship.` }
 ]
 
