@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-
-interface PanZoomState {
-  scale: number
-  x: number
-  y: number
-}
+import { useMotionValue } from 'framer-motion'
 
 const MIN_SCALE = 1
 const MAX_SCALE = 4
@@ -31,7 +26,10 @@ function clampScale(scale: number): number {
 }
 
 export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null>) {
-  const [state, setState] = useState<PanZoomState>({ scale: 1, x: 0, y: 0 })
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const scale = useMotionValue(1)
+  
   const [isDragging, setIsDragging] = useState(false)
   const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null)
   const pinchRef = useRef<{ dist: number; scale: number; origX: number; origY: number } | null>(null)
@@ -47,30 +45,32 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
     return metricsRef.current
   }, [viewportRef])
 
-  const applyState = useCallback((next: PanZoomState) => {
+  const applyState = useCallback((nextX: number, nextY: number, nextScale: number) => {
     const { mapSize, vpW, vpH } = measure()
     if (!mapSize) return
-    const scale = clampScale(next.scale)
-    const pan = clampPan(next.x, next.y, scale, mapSize, vpW, vpH)
-    setState({ scale, ...pan })
-  }, [measure])
+    const s = clampScale(nextScale)
+    const pan = clampPan(nextX, nextY, s, mapSize, vpW, vpH)
+    x.set(pan.x)
+    y.set(pan.y)
+    scale.set(s)
+  }, [measure, x, y, scale])
 
   useEffect(() => {
     const vp = viewportRef.current
     if (!vp) return
     const ro = new ResizeObserver(() => {
-      setState(prev => {
-        const { mapSize, vpW, vpH } = measure()
-        if (!mapSize) return prev
-        const scale = clampScale(prev.scale)
-        const pan = clampPan(prev.x, prev.y, scale, mapSize, vpW, vpH)
-        return { scale, ...pan }
-      })
+      const { mapSize, vpW, vpH } = measure()
+      if (!mapSize) return
+      const s = clampScale(scale.get())
+      const pan = clampPan(x.get(), y.get(), s, mapSize, vpW, vpH)
+      x.set(pan.x)
+      y.set(pan.y)
+      scale.set(s)
     })
     ro.observe(vp)
     measure()
     return () => ro.disconnect()
-  }, [viewportRef, measure])
+  }, [viewportRef, measure, x, y, scale])
 
   const frameRoute = useCallback((path: {x: number; y: number}[]) => {
     const { mapSize, vpW, vpH } = measure()
@@ -84,12 +84,12 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
     const minY = Math.min(...ys)
     const maxY = Math.max(...ys)
 
+    // Prevent extreme zoom if start and end are practically the same point
     const bw = maxX - minX
     const bh = maxY - minY
     const cx = (minX + maxX) / 2
     const cy = (minY + maxY) / 2
 
-    // Prevent extreme zoom if start and end are practically the same point
     const safeBw = Math.max(bw, 0.05)
     const safeBh = Math.max(bh, 0.05)
 
@@ -104,33 +104,33 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
     // Take the smaller scale to ensure BOTH dimensions fit perfectly
     const newScale = clampScale(Math.min(scaleX, scaleY))
 
-    const x = (0.5 - cx) * mapSize * newScale
-    const y = (0.5 - cy) * mapSize * newScale
+    const newX = (0.5 - cx) * mapSize * newScale
+    const newY = (0.5 - cy) * mapSize * newScale
 
-    applyState({ scale: newScale, x, y })
+    applyState(newX, newY, newScale)
   }, [measure, applyState])
 
   const resetView = useCallback(() => {
-    applyState({ scale: 1, x: 0, y: 0 })
+    applyState(0, 0, 1)
   }, [applyState])
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     if (e.button !== 0) return
     ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
-    dragRef.current = { startX: e.clientX, startY: e.clientY, origX: state.x, origY: state.y }
+    dragRef.current = { startX: e.clientX, startY: e.clientY, origX: x.get(), origY: y.get() }
     setIsDragging(true)
-  }, [state.x, state.y])
+  }, [x, y])
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragRef.current) return
     const dx = e.clientX - dragRef.current.startX
     const dy = e.clientY - dragRef.current.startY
-    applyState({
-      scale: state.scale,
-      x: dragRef.current.origX + dx,
-      y: dragRef.current.origY + dy,
-    })
-  }, [state.scale, applyState])
+    applyState(
+      dragRef.current.origX + dx,
+      dragRef.current.origY + dy,
+      scale.get()
+    )
+  }, [scale, applyState])
 
   const onPointerUp = useCallback(() => {
     dragRef.current = null
@@ -138,11 +138,9 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
   }, [])
 
   const onWheel = useCallback((e: React.WheelEvent) => {
-    // Note: removed e.preventDefault() to avoid passive event listener warnings
-    // The map container doesn't scroll anyway, so it's safe to omit.
     const delta = e.deltaY > 0 ? -0.12 : 0.12
-    applyState({ scale: state.scale + delta, x: state.x, y: state.y })
-  }, [state.scale, state.x, state.y, applyState])
+    applyState(x.get(), y.get(), scale.get() + delta)
+  }, [x, y, scale, applyState])
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
     setIsDragging(true)
@@ -151,12 +149,12 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
       const dy = e.touches[0].clientY - e.touches[1].clientY
       pinchRef.current = {
         dist: Math.hypot(dx, dy),
-        scale: state.scale,
-        origX: state.x,
-        origY: state.y,
+        scale: scale.get(),
+        origX: x.get(),
+        origY: y.get(),
       }
     }
-  }, [state.scale, state.x, state.y])
+  }, [scale, x, y])
 
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2 && pinchRef.current) {
@@ -164,11 +162,11 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
       const dy = e.touches[0].clientY - e.touches[1].clientY
       const dist = Math.hypot(dx, dy)
       const ratio = dist / pinchRef.current.dist
-      applyState({
-        scale: pinchRef.current.scale * ratio,
-        x: pinchRef.current.origX,
-        y: pinchRef.current.origY,
-      })
+      applyState(
+        pinchRef.current.origX,
+        pinchRef.current.origY,
+        pinchRef.current.scale * ratio
+      )
     }
   }, [applyState])
 
@@ -178,15 +176,17 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
   }, [])
 
   const zoomIn = useCallback(() => {
-    applyState({ scale: state.scale + 0.25, x: state.x, y: state.y })
-  }, [state.scale, state.x, state.y, applyState])
+    applyState(x.get(), y.get(), scale.get() + 0.25)
+  }, [x, y, scale, applyState])
 
   const zoomOut = useCallback(() => {
-    applyState({ scale: state.scale - 0.25, x: state.x, y: state.y })
-  }, [state.scale, state.x, state.y, applyState])
+    applyState(x.get(), y.get(), scale.get() - 0.25)
+  }, [x, y, scale, applyState])
 
   return {
-    ...state,
+    x,
+    y,
+    scale,
     isDragging,
     frameRoute,
     resetView,

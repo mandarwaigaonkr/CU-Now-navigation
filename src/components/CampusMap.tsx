@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { AnimatePresence, m } from 'framer-motion'
+import { AnimatePresence, m, useMotionTemplate, useTransform } from 'framer-motion'
 import toast from 'react-hot-toast'
 import campusMap from '../assets/campus-map.png'
 import { type MapPoint, type Waypoint, WAYPOINTS, VENUE_MAP_POSITIONS } from '../data/mapConfig'
@@ -53,6 +53,8 @@ export default function CampusMap({
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null)
 
   const { frameRoute, ...panZoom } = useMapPanZoom(viewportRef)
+  const transformTemplate = useMotionTemplate`translate(calc(-50% + ${panZoom.x}px), calc(-50% + ${panZoom.y}px)) scale(${panZoom.scale})`
+  const inverseScale = useTransform(panZoom.scale, s => 1 / s)
 
   const activeWaypoints = calibrationMode ? editorWaypoints : WAYPOINTS
   const roadSegments = getRoadSegments(calibrationMode ? editorWaypoints : [])
@@ -134,7 +136,7 @@ export default function CampusMap({
     }
 
     // Use a dynamic threshold based on zoom scale so we can place points closer together when zoomed in
-    const threshold = 0.02 / panZoom.scale
+    const threshold = 0.02 / panZoom.scale.get()
     const hit = findNearestWaypoint(pt, editorWaypoints, threshold)
 
     if (editorMode === 'connect') {
@@ -252,11 +254,11 @@ export default function CampusMap({
           }}
           onClick={handleMapClick}
         >
-          <div
+          <m.div
             ref={mapRef}
             className="campus-map__transform"
             style={{
-              transform: `translate(calc(-50% + ${panZoom.x}px), calc(-50% + ${panZoom.y}px)) scale(${panZoom.scale})`,
+              transform: transformTemplate,
               transition: panZoom.isDragging ? 'none' : 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
@@ -265,6 +267,7 @@ export default function CampusMap({
               alt="Campus map"
               className="campus-map__image"
               draggable={false}
+              fetchPriority="high"
             />
 
             <svg
@@ -368,15 +371,19 @@ export default function CampusMap({
               <m.div
                 key={`from-${fromId}`}
                 className="campus-map__pin"
-                style={{ left: `${fromPosition.x * 100}%`, top: `${fromPosition.y * 100}%` }}
-                initial={{ scale: 0, x: "-50%", y: "-50%", rotate: startAngle - 45 }}
-                animate={{ scale: 1 / panZoom.scale, x: "-50%", y: "-50%", rotate: startAngle }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                style={{ left: `${fromPosition.x * 100}%`, top: `${fromPosition.y * 100}%`, scale: inverseScale, x: "-50%", y: "-50%", rotate: startAngle }}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="campus-map__pin-svg">
-                  <path d="M12 2L3 20L12 15L21 20L12 2Z" fill="#10B981" stroke="rgba(0,0,0,0.8)" strokeWidth="2" strokeLinejoin="round" />
-                </svg>
-                <span className="campus-map__pin-pulse campus-map__pin-pulse--green" />
+                <m.div
+                  initial={{ scale: 0, rotate: -45 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="campus-map__pin-svg">
+                    <path d="M12 2L3 20L12 15L21 20L12 2Z" fill="#10B981" stroke="rgba(0,0,0,0.8)" strokeWidth="2" strokeLinejoin="round" />
+                  </svg>
+                  <span className="campus-map__pin-pulse campus-map__pin-pulse--green" />
+                </m.div>
               </m.div>
             )}
 
@@ -384,18 +391,22 @@ export default function CampusMap({
               <m.div
                 key={`to-${toId}`}
                 className="campus-map__pin"
-                style={{ left: `${toPosition.x * 100}%`, top: `${toPosition.y * 100}%` }}
-                initial={{ scale: 0, x: "-50%", y: "-50%" }}
-                animate={{ scale: 1 / panZoom.scale, x: "-50%", y: "-50%" }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+                style={{ left: `${toPosition.x * 100}%`, top: `${toPosition.y * 100}%`, scale: inverseScale, x: "-50%", y: "-50%" }}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="campus-map__pin-svg">
-                  <polygon points="12,2 22,12 12,22 2,12" fill="#EF4444" stroke="rgba(0,0,0,0.8)" strokeWidth="2" strokeLinejoin="round" />
-                </svg>
-                <span className="campus-map__pin-pulse campus-map__pin-pulse--red" />
+                <m.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="campus-map__pin-svg">
+                    <polygon points="12,2 22,12 12,22 2,12" fill="#EF4444" stroke="rgba(0,0,0,0.8)" strokeWidth="2" strokeLinejoin="round" />
+                  </svg>
+                  <span className="campus-map__pin-pulse campus-map__pin-pulse--red" />
+                </m.div>
               </m.div>
             )}
-          </div>
+          </m.div>
 
         </div>
 
