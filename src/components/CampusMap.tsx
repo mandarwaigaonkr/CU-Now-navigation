@@ -38,13 +38,16 @@ export default function CampusMap({
   const viewportRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
   const [calibrationMode, setCalibrationMode] = useState(false)
+  const [venueMode, setVenueMode] = useState(false)
   const [editorWaypoints, setEditorWaypoints] = useState<Waypoint[]>(() => cloneWaypoints(WAYPOINTS))
+  const [editorVenues, setEditorVenues] = useState<Record<string, MapPoint>>(() => ({ ...VENUE_MAP_POSITIONS }))
   const [editorMode, setEditorMode] = useState<EditorMode>('add')
   const [chainRoads, setChainRoads] = useState(true)
   const [selectedWpId, setSelectedWpId] = useState<string | null>(null)
   const [lastAddedId, setLastAddedId] = useState<string | null>(null)
   const [routePath, setRoutePath] = useState<MapPoint[]>([])
   const [exportCopied, setExportCopied] = useState(false)
+  const pointerDownRef = useRef<{ x: number; y: number } | null>(null)
 
   const { zoomToBounds, ...panZoom } = useMapPanZoom(viewportRef)
 
@@ -72,6 +75,7 @@ export default function CampusMap({
   }, [])
 
   const openCalibration = useCallback(() => {
+    setVenueMode(false)
     clearWaypointDraft()
     setEditorWaypoints(cloneWaypoints(WAYPOINTS))
     setCalibrationMode(true)
@@ -82,6 +86,17 @@ export default function CampusMap({
   const closeCalibration = useCallback(() => {
     setCalibrationMode(false)
     setSelectedWpId(null)
+  }, [])
+
+  const openVenueMode = useCallback(() => {
+    setCalibrationMode(false)
+    setSelectedWpId(null)
+    setEditorVenues({ ...VENUE_MAP_POSITIONS })
+    setVenueMode(true)
+  }, [])
+
+  const closeVenueMode = useCallback(() => {
+    setVenueMode(false)
   }, [])
 
   const screenToNormalized = useCallback((clientX: number, clientY: number): MapPoint | null => {
@@ -95,12 +110,30 @@ export default function CampusMap({
   }, [])
 
   const handleMapClick = useCallback((e: React.MouseEvent) => {
-    if (!calibrationMode) return
+    if (!calibrationMode && !venueMode) return
+
+    if (pointerDownRef.current) {
+      const dx = e.clientX - pointerDownRef.current.x
+      const dy = e.clientY - pointerDownRef.current.y
+      if (Math.hypot(dx, dy) > 5) return // Ignored because it was a drag, not a clean click
+    }
 
     const pt = screenToNormalized(e.clientX, e.clientY)
     if (!pt) return
 
-    const hit = findNearestWaypoint(pt, editorWaypoints)
+    if (venueMode) {
+      const name = window.prompt('Enter Venue ID (e.g., cse-lab, library):')
+      if (name?.trim()) {
+        const id = name.trim()
+        setEditorVenues(prev => ({ ...prev, [id]: pt }))
+        toast.success(`Added venue: ${id}`)
+      }
+      return
+    }
+
+    // Use a dynamic threshold based on zoom scale so we can place points closer together when zoomed in
+    const threshold = 0.02 / panZoom.scale
+    const hit = findNearestWaypoint(pt, editorWaypoints, threshold)
 
     if (editorMode === 'connect') {
       if (!hit) {
@@ -135,6 +168,7 @@ export default function CampusMap({
     toast.success(`Added ${added.id}`)
   }, [
     calibrationMode,
+    venueMode,
     chainRoads,
     editorMode,
     editorWaypoints,
@@ -174,6 +208,27 @@ export default function CampusMap({
     }
   }, [editorWaypoints])
 
+  const handleResetVenues = useCallback(() => {
+    setEditorVenues({ ...VENUE_MAP_POSITIONS })
+    toast.success('Venues reset to saved file')
+  }, [])
+
+  const handleExportVenues = useCallback(async () => {
+    const lines = Object.entries(editorVenues)
+      .map(([id, pt]) => `  '${id}': { x: ${pt.x}, y: ${pt.y} },`)
+      .join('\\n')
+    const text = `export const VENUE_MAP_POSITIONS: Record<string, MapPoint> = {\\n${lines}\\n}`
+
+    try {
+      await navigator.clipboard.writeText(text)
+      setExportCopied(true)
+      toast.success('Venues copied! Paste into mapConfig.ts')
+      setTimeout(() => setExportCopied(false), 2000)
+    } catch {
+      toast.error('Could not copy to clipboard')
+    }
+  }, [editorVenues])
+
   const svgPath = pointsToSvgPath(routePath)
 
   return (
@@ -181,8 +236,11 @@ export default function CampusMap({
       <div className="campus-map__frame">
         <div
           ref={viewportRef}
-          className={`campus-map__viewport ${calibrationMode ? 'campus-map__viewport--calibrate' : ''}`}
-          {...(calibrationMode ? {} : panZoom.handlers)}
+          className={`campus-map__viewport ${(calibrationMode || venueMode) ? 'campus-map__viewport--calibrate' : ''}`}
+          {...panZoom.handlers}
+          onPointerDownCapture={e => {
+            pointerDownRef.current = { x: e.clientX, y: e.clientY }
+          }}
           onClick={handleMapClick}
         >
           <div
@@ -244,7 +302,7 @@ export default function CampusMap({
                 </g>
               ))}
 
-              {calibrationMode && Object.entries(VENUE_MAP_POSITIONS).map(([id, pos]) => (
+              {(calibrationMode || venueMode) && Object.entries(venueMode ? editorVenues : VENUE_MAP_POSITIONS).map(([id, pos]) => (
                 <g key={`venue-${id}`}>
                   <circle
                     cx={pos.x}
@@ -319,6 +377,15 @@ export default function CampusMap({
           </button>
           <button
             type="button"
+            className={`campus-map__ctrl-btn campus-map__ctrl-btn--calibrate ${venueMode ? 'campus-map__ctrl-btn--active' : ''}`}
+            onClick={() => (venueMode ? closeVenueMode() : openVenueMode())}
+            aria-label="Venue editor"
+            title="Venue editor"
+          >
+            📍
+          </button>
+          <button
+            type="button"
             className={`campus-map__ctrl-btn campus-map__ctrl-btn--calibrate ${calibrationMode ? 'campus-map__ctrl-btn--active' : ''}`}
             onClick={() => (calibrationMode ? closeCalibration() : openCalibration())}
             aria-label="Road editor"
@@ -330,6 +397,35 @@ export default function CampusMap({
       </div>
 
       <AnimatePresence>
+        {venueMode && (
+          <m.div
+            className="campus-map__calib-panel"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+          >
+            <div className="campus-map__calib-header">
+              <span>Venue Editor</span>
+              <button type="button" onClick={closeVenueMode}>Done</button>
+            </div>
+
+            <p className="campus-map__calib-hint">
+              Tap anywhere on the map to drop a pin. You will be prompted to enter a Venue ID.
+            </p>
+
+            <div className="campus-map__calib-meta">
+              <span>{Object.keys(editorVenues).length} venues plotted</span>
+            </div>
+
+            <div className="campus-map__calib-actions">
+              <button type="button" onClick={handleResetVenues}>Reset</button>
+              <button type="button" onClick={handleExportVenues}>
+                {exportCopied ? 'Copied!' : 'Export venues'}
+              </button>
+            </div>
+          </m.div>
+        )}
+
         {calibrationMode && (
           <m.div
             className="campus-map__calib-panel"

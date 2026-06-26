@@ -66,62 +66,7 @@ const VENUES: Venue[] = [
     defaultDirections:
       'From the Main Gate, walk straight ahead. The PU Block is located on the right side of the campus. Follow the signs for PU Block.',
   },
-  {
-    id: 'cse-lab',
-    name: 'CSE Lab Visit',
-    block: '2nd Block',
-    image: '/venues/second_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road. The 2nd Block is the second building on your left, near the open auditorium. The CSE Lab is inside the 2nd Block.',
-  },
-  {
-    id: 'ece-lab',
-    name: 'ECE Lab',
-    block: '2nd Block',
-    image: '/venues/second_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road. The 2nd Block is the second building on your left, near the open auditorium. The ECE Lab is inside the 2nd Block.',
-  },
-  {
-    id: 'block-3-audi',
-    name: 'Block 3 Audi',
-    block: '3rd Block',
-    image: '/venues/third_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road. Pass the 1st and 2nd Blocks on your left. The 3rd Block is next. The Auditorium is located inside.',
-  },
-  {
-    id: 'block-4-audi',
-    name: 'Block 4 Audi',
-    block: 'Block 4',
-    image: '/venues/fourth_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road. Pass Blocks 1, 2, and 3. Block 4 is the next building on the route. The Auditorium is located inside.',
-  },
-  {
-    id: 'eee-lab',
-    name: 'EEE Lab',
-    block: '3rd Block',
-    image: '/venues/third_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road. Pass the 1st and 2nd Blocks on your left. The 3rd Block is next. The EEE Lab is located inside.',
-  },
-  {
-    id: 'me-lab',
-    name: 'ME Lab',
-    block: '6th Block',
-    image: '/venues/sixth_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road towards the far end of campus. The 6th Block is one of the last buildings. The ME Lab is located inside.',
-  },
-  {
-    id: 'civil-lab',
-    name: 'Civil Lab',
-    block: '6th Block',
-    image: '/venues/sixth_block.jpg',
-    defaultDirections:
-      'From the Main Gate, walk along the main road towards the far end of campus. The 6th Block is one of the last buildings. The Civil Lab is located inside.',
-  },
+
   {
     id: 'arch-block',
     name: 'Architecture Block',
@@ -150,6 +95,27 @@ const VENUES: Venue[] = [
     block: 'Amphitheater',
     image: '/venues/amphi_theater_rotated.JPG',
     defaultDirections: 'Located centrally on campus.',
+  },
+  {
+    id: 'main-ground',
+    name: 'Main Ground and Basketball Court',
+    block: 'Grounds',
+    image: '/venues/second_block.jpg', // Placeholder
+    defaultDirections: 'The main sports grounds and basketball court.',
+  },
+  {
+    id: 'car-parking',
+    name: 'Car Parking',
+    block: 'Parking',
+    image: '/venues/pu_block.jpg', // Placeholder
+    defaultDirections: 'Follow the signs for the main car parking.',
+  },
+  {
+    id: '2-wheeler-parking',
+    name: '2 Wheeler Parking',
+    block: 'Parking',
+    image: '/venues/second_block.jpg', // Placeholder
+    defaultDirections: 'Designated parking for two-wheelers.',
   }
 ]
 

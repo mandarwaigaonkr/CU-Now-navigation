@@ -8,37 +8,52 @@ function dist(a: MapPoint, b: MapPoint): number {
   return Math.hypot(a.x - b.x, a.y - b.y)
 }
 
-function nearestWaypoint(point: MapPoint, waypoints: Waypoint[]): string {
-  if (waypoints.length === 0) return ''
-  let bestId = waypoints[0].id
-  let bestDist = Infinity
-  for (const wp of waypoints) {
-    const d = dist(point, wp)
-    if (d < bestDist) {
-      bestDist = d
-      bestId = wp.id
-    }
-  }
-  return bestId
-}
-
 function getWaypointById(waypoints: Waypoint[], id: string): Waypoint | undefined {
   return waypoints.find(w => w.id === id)
 }
 
-function dijkstra(startId: string, endId: string, waypoints: Waypoint[]): string[] {
-  if (!startId || !endId) return []
-  if (startId === endId) return [startId]
+function findClosestWaypoints(point: MapPoint, waypoints: Waypoint[], count: number = 3): Waypoint[] {
+  return [...waypoints]
+    .sort((a, b) => dist(point, a) - dist(point, b))
+    .slice(0, count)
+}
+
+function dijkstra(start: MapPoint, end: MapPoint, waypoints: Waypoint[]): string[] {
+  if (waypoints.length === 0) return []
 
   const distances = new Map<string, number>()
   const previous = new Map<string, string | null>()
-  const unvisited = new Set(waypoints.map(w => w.id))
+  
+  const V_START = 'VIRTUAL_START'
+  const V_END = 'VIRTUAL_END'
 
-  for (const wp of waypoints) {
-    distances.set(wp.id, Infinity)
-    previous.set(wp.id, null)
+  const unvisited = new Set<string>([V_START, V_END, ...waypoints.map(w => w.id)])
+
+  for (const id of unvisited) {
+    distances.set(id, Infinity)
+    previous.set(id, null)
   }
-  distances.set(startId, 0)
+  distances.set(V_START, 0)
+
+  const startConnections = findClosestWaypoints(start, waypoints, 3).map(w => w.id)
+  const endConnections = findClosestWaypoints(end, waypoints, 3).map(w => w.id)
+  const wpMap = new Map<string, Waypoint>(waypoints.map(w => [w.id, w]))
+
+  const getConnections = (id: string): string[] => {
+    if (id === V_START) return startConnections
+    if (id === V_END) return []
+    const wp = wpMap.get(id)
+    if (!wp) return []
+    const conns = [...wp.connections]
+    if (endConnections.includes(id)) conns.push(V_END)
+    return conns
+  }
+
+  const getDist = (id1: string, id2: string): number => {
+    const p1 = id1 === V_START ? start : (id1 === V_END ? end : wpMap.get(id1)!)
+    const p2 = id2 === V_START ? start : (id2 === V_END ? end : wpMap.get(id2)!)
+    return dist(p1, p2)
+  }
 
   while (unvisited.size > 0) {
     let current: string | null = null
@@ -53,16 +68,14 @@ function dijkstra(startId: string, endId: string, waypoints: Waypoint[]): string
     if (current === null || minDist === Infinity) break
 
     unvisited.delete(current)
-    if (current === endId) break
+    if (current === V_END) break
 
-    const wp = getWaypointById(waypoints, current)
-    if (!wp) continue
+    const connections = getConnections(current)
 
-    for (const neighborId of wp.connections) {
+    for (const neighborId of connections) {
       if (!unvisited.has(neighborId)) continue
-      const neighbor = getWaypointById(waypoints, neighborId)
-      if (!neighbor) continue
-      const alt = (distances.get(current) ?? Infinity) + dist(wp, neighbor)
+      
+      const alt = (distances.get(current) ?? Infinity) + getDist(current, neighborId)
       if (alt < (distances.get(neighborId) ?? Infinity)) {
         distances.set(neighborId, alt)
         previous.set(neighborId, current)
@@ -71,13 +84,14 @@ function dijkstra(startId: string, endId: string, waypoints: Waypoint[]): string
   }
 
   const path: string[] = []
-  let cursor: string | null = endId
+  let cursor: string | null = V_END
   while (cursor) {
-    path.unshift(cursor)
+    if (cursor !== V_START && cursor !== V_END) {
+      path.unshift(cursor)
+    }
     cursor = previous.get(cursor) ?? null
   }
 
-  if (path[0] !== startId) return [startId, endId]
   return path
 }
 
@@ -91,10 +105,7 @@ export function findRoute(
     return [start, end]
   }
 
-  const startWpId = nearestWaypoint(start, waypoints)
-  const endWpId = nearestWaypoint(end, waypoints)
-
-  const wpIds = dijkstra(startWpId, endWpId, waypoints)
+  const wpIds = dijkstra(start, end, waypoints)
   const route: MapPoint[] = [start]
 
   for (const id of wpIds) {
