@@ -75,6 +75,7 @@ Failure to follow the Code of Conduct may lead to disciplinary action. Serious o
 • Visitors should park their vehicles only in the designated visitor or general parking areas.
 • Access is restricted to public areas and specific departments being visited; unauthorized entry into classrooms, labs, or hostels is strictly prohibited.
 • Please maintain a quiet and respectful demeanor to avoid disrupting ongoing academic activities.
+• Visitors must fully cooperate with security personnel and promptly address any queries they may have while on campus.
 
 This code ensures a safe, inclusive, and productive learning environment while promoting academic excellence, integrity, and responsible citizenship.` }
 ]
