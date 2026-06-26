@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import VENUES from '../../data/venues'
-import Navbar from '../../components/Navbar'
 import './About.css'
 
 const ADDITIONAL_FACILITIES: Record<string, string[]> = {
@@ -251,10 +250,6 @@ export default function About() {
             </div>
           )}
         </div>
-      </div>
-      
-      <div style={{ flexShrink: 0 }}>
-        <Navbar />
       </div>
     </div>
   )

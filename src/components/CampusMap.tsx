@@ -5,7 +5,7 @@ import campusMap from '../assets/campus-map.png'
 import { type MapPoint, type Waypoint, WAYPOINTS, VENUE_MAP_POSITIONS } from '../data/mapConfig'
 import VENUES, { type Venue } from '../data/venues'
 import { useMapPanZoom } from '../hooks/useMapPanZoom'
-import { findRoute, getRouteBounds, pointsToSvgPath } from '../utils/pathfinding'
+import { findRoute, pointsToSvgPath } from '../utils/pathfinding'
 import {
   addWaypoint,
   clearWaypointDraft,

@@ -100,13 +100,15 @@ export function removeWaypoint(waypoints: Waypoint[], id: string): Waypoint[] {
 export function getRoadSegments(waypoints: Waypoint[]) {
   const byId = new Map(waypoints.map(wp => [wp.id, wp]))
   const segments: Array<{ x1: number; y1: number; x2: number; y2: number; key: string }> = []
+  const seen = new Set<string>()
 
   for (const wp of waypoints) {
     for (const connId of wp.connections) {
       const neighbor = byId.get(connId)
       if (!neighbor) continue
       const key = [wp.id, connId].sort().join('--')
-      if (segments.some(seg => seg.key === key)) continue
+      if (seen.has(key)) continue
+      seen.add(key)
       segments.push({
         key,
         x1: wp.x,

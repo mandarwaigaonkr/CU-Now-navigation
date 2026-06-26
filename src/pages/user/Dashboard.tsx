@@ -19,7 +19,7 @@ interface SelectedVenueEvent {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { user, profile } = useAuth()
+  const { user } = useAuth()
   const { events, loading } = useEvents()
   const [now, setNow] = useState(new Date())
   const [selectedVenueEvent, setSelectedVenueEvent] = useState<SelectedVenueEvent | null>(null)

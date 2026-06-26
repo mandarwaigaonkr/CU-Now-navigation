@@ -1,7 +1,7 @@
 // src/components/Navbar.tsx
 // Bottom tab bar — 4 tabs: Home, Schedule, Announcements, Profile
 
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './Navbar.css'
 
 interface NavItemProps {
@@ -10,15 +10,13 @@ interface NavItemProps {
   icon: string;
   iconActive: string;
   hasBadge?: boolean;
-  onClick?: () => void;
 }
 
-function NavItem({ to, label, icon, iconActive, hasBadge, onClick }: NavItemProps) {
+function NavItem({ to, label, icon, iconActive, hasBadge }: NavItemProps) {
   return (
     <NavLink
       to={to}
       viewTransition
-      onClick={onClick}
       className={({ isActive }) =>
         `nav-item ${isActive ? 'nav-item--active' : ''}`
       }
@@ -52,29 +50,16 @@ const icons = {
   navigationActive: `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>`,
 }
 
-const TAB_ORDER = ['/dashboard', '/navigation', '/schedule', '/about', '/profile'];
 
 export default function Navbar() {
-  const location = useLocation();
-
-  const handleTabClick = (targetPath: string) => {
-    const currentIndex = TAB_ORDER.findIndex(path => location.pathname.startsWith(path));
-    const targetIndex = TAB_ORDER.findIndex(path => targetPath.startsWith(path));
-    
-    // Determine slide direction
-    if (currentIndex !== -1 && targetIndex !== -1) {
-      document.documentElement.dataset.direction = targetIndex > currentIndex ? 'left' : 'right';
-    }
-  };
-
   return (
     <nav className="navbar">
       <div className="navbar__inner">
-        <NavItem to="/dashboard" label="Home" icon={icons.home} iconActive={icons.homeActive} onClick={() => handleTabClick('/dashboard')} />
-        <NavItem to="/navigation" label="Map" icon={icons.navigation} iconActive={icons.navigationActive} onClick={() => handleTabClick('/navigation')} />
-        <NavItem to="/schedule" label="Schedule" icon={icons.schedule} iconActive={icons.scheduleActive} onClick={() => handleTabClick('/schedule')} />
-        <NavItem to="/about" label="About" icon={icons.about} iconActive={icons.aboutActive} onClick={() => handleTabClick('/about')} />
-        <NavItem to="/profile" label="Profile" icon={icons.profile} iconActive={icons.profileActive} onClick={() => handleTabClick('/profile')} />
+        <NavItem to="/dashboard" label="Home" icon={icons.home} iconActive={icons.homeActive} />
+        <NavItem to="/navigation" label="Map" icon={icons.navigation} iconActive={icons.navigationActive} />
+        <NavItem to="/schedule" label="Schedule" icon={icons.schedule} iconActive={icons.scheduleActive} />
+        <NavItem to="/about" label="About" icon={icons.about} iconActive={icons.aboutActive} />
+        <NavItem to="/profile" label="Profile" icon={icons.profile} iconActive={icons.profileActive} />
       </div>
     </nav>
   )

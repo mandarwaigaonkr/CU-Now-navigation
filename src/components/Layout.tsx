@@ -1,6 +1,6 @@
 import { useLocation, useOutlet } from 'react-router-dom'
 import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Navbar from './Navbar'
 
 const TAB_ORDER = ['/dashboard', '/navigation', '/schedule', '/about', '/profile']

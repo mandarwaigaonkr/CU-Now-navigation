@@ -19,7 +19,6 @@ export default function MapNavigation() {
   const [activeFromId, setActiveFromId] = useState<string | null>(null)
   const [activeToId, setActiveToId] = useState<string | null>(null)
   const [routeKey, setRouteKey] = useState(0)
-  const [panelOpen, setPanelOpen] = useState(true)
   const [venueModal, setVenueModal] = useState<Venue | null>(null)
   const [infoModalOpen, setInfoModalOpen] = useState(false)
 
@@ -44,7 +43,6 @@ export default function MapNavigation() {
     setActiveFromId(fromId)
     setActiveToId(toId)
     setRouteKey(k => k + 1)
-    setPanelOpen(false)
   }
 
   function handleClear() {
@@ -52,11 +50,9 @@ export default function MapNavigation() {
     setToId(null)
     setActiveFromId(null)
     setActiveToId(null)
-    setPanelOpen(true)
   }
 
-  const fromLabel = LOCATION_OPTIONS.find(o => o.value === activeFromId)?.label
-  const toLabel = LOCATION_OPTIONS.find(o => o.value === activeToId)?.label
+
 
   return (
     <div className="map-navigation-page">

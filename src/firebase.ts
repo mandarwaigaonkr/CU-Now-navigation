@@ -1,7 +1,7 @@
 // src/firebase.js - Firebase initialization for CU Now
 import { initializeApp } from 'firebase/app'
 import { browserLocalPersistence, getAuth, GoogleAuthProvider, setPersistence } from 'firebase/auth'
-import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -20,9 +20,6 @@ setPersistence(auth, browserLocalPersistence).catch((err) => {
 })
 
 export const db = getFirestore(app)
-enableIndexedDbPersistence(db).catch((err) => {
-  console.error("Firebase persistence error:", err.code)
-})
 
 export const googleProvider = new GoogleAuthProvider()
 googleProvider.setCustomParameters({ prompt: 'select_account' })
