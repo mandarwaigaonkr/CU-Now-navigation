@@ -100,21 +100,21 @@ const VENUES: Venue[] = [
     id: 'main-ground',
     name: 'Main Ground and Basketball Court',
     block: 'Grounds',
-    image: '/venues/second_block.jpg', // Placeholder
+    image: '/venues/main_ground.jfif',
     defaultDirections: 'The main sports grounds and basketball court.',
   },
   {
     id: 'car-parking',
     name: 'Car Parking',
     block: 'Parking',
-    image: '/venues/pu_block.jpg', // Placeholder
+    image: '/venues/parking_car.jfif',
     defaultDirections: 'Follow the signs for the main car parking.',
   },
   {
     id: '2-wheeler-parking',
     name: '2 Wheeler Parking',
     block: 'Parking',
-    image: '/venues/second_block.jpg', // Placeholder
+    image: '/venues/bike_parking.jfif',
     defaultDirections: 'Designated parking for two-wheelers.',
   }
 ]
