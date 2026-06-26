@@ -122,9 +122,6 @@ export default function About() {
       })
     })
 
-    // Convert to array
-    const blocksArray = Object.values(blocksMap)
-
     // Define the custom order requested
     const customOrder = [
       '1st Block',
@@ -144,16 +141,12 @@ export default function About() {
       'Bike Parking'
     ]
 
+    // Convert to array and filter out any blocks not in customOrder
+    const blocksArray = Object.values(blocksMap).filter(block => customOrder.includes(block.name))
+
     // Sort based on the custom order
     blocksArray.sort((a, b) => {
-      const indexA = customOrder.indexOf(a.name)
-      const indexB = customOrder.indexOf(b.name)
-      
-      if (indexA === -1 && indexB === -1) return 0
-      if (indexA === -1) return 1
-      if (indexB === -1) return -1
-      
-      return indexA - indexB
+      return customOrder.indexOf(a.name) - customOrder.indexOf(b.name)
     })
 
     return blocksArray
