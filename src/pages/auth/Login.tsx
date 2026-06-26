@@ -218,7 +218,7 @@ export default function Login() {
       title: 'Guest Login',
       action: 'Continue with Google',
       role: 'For visitors & outsiders',
-      support: 'Sign in with any Google account to explore campus events',
+      support: 'Sign in with any Google account to explore our campus facilities',
       supportIcon: <GlobeIcon className="login-card__support-icon" />,
       btnId: 'guest-signin-btn',
       cardClass: 'login-card-single--guest',
@@ -229,7 +229,7 @@ export default function Login() {
       title: 'Admin Login',
       action: 'Sign in with Google',
       role: 'For faculty & administrators',
-      support: 'Secure access for event creators and managers',
+      support: 'Secure access for campus administrators',
       supportIcon: <LockIcon className="login-card__support-icon" />,
       btnId: 'admin-signin-btn',
       cardClass: 'login-card-single--admin',
@@ -277,7 +277,7 @@ export default function Login() {
         </h1>
 
         <p className="login-subtitle login-animate-in login-animate-in--subtitle">
-          Stay on time. Stay informed. Stay ahead.
+          CU Nav is a campus navigation app which helps visitors navigate around the campus and explore our campus facilities.
         </p>
 
         {/* ---- Diamond separator ---- */}
@@ -288,7 +288,7 @@ export default function Login() {
         </div>
 
         <p className="login-description login-animate-in login-animate-in--desc">
-          Choose how you want to sign in to explore campus events and navigation.
+          Choose how you want to sign in to get started.
         </p>
 
         {/* ---- SEGMENTED TOGGLE (2-way) ---- */}
