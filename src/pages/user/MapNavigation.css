@@ -44,22 +44,23 @@
 }
 
 .map-navigation-info-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-bg-border);
+  color: var(--color-text-primary);
   cursor: pointer;
-  margin-left: 6px;
+  margin-left: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 4px;
-  border-radius: 50%;
-  transition: color 0.2s, background 0.2s;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .map-navigation-info-btn:hover {
-  color: var(--color-text-primary);
-  background: var(--color-bg-elevated);
+  background: var(--color-bg-border);
 }
 
 .map-navigation-route-card {
