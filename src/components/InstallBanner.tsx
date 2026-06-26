@@ -34,7 +34,7 @@ export default function InstallBanner() {
             </svg>
           </div>
           <div className="install-banner__text">
-            <p className="install-banner__title">Install CU Now</p>
+            <p className="install-banner__title">Install CU Nav</p>
             <p className="install-banner__desc">Add to your home screen for the best experience.</p>
           </div>
         </div>
