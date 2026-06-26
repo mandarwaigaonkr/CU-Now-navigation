@@ -43,6 +43,25 @@
   text-transform: uppercase;
 }
 
+.map-navigation-info-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: color 0.2s, background 0.2s;
+}
+
+.map-navigation-info-btn:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-elevated);
+}
+
 .map-navigation-route-card {
   display: flex;
   background: var(--color-bg-elevated);

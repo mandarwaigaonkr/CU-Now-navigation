@@ -2,8 +2,10 @@ import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import CampusMap from '../../components/CampusMap'
 import CustomSelect from '../../components/CustomSelect'
-import VENUES from '../../data/venues'
+import VENUES, { type Venue } from '../../data/venues'
 import { getMapPosition } from '../../data/mapConfig'
+import VenueDirections from '../../components/VenueDirections'
+import ConfirmModal from '../../components/ConfirmModal'
 import './MapNavigation.css'
 
 const LOCATION_OPTIONS = [
@@ -18,6 +20,8 @@ export default function MapNavigation() {
   const [activeToId, setActiveToId] = useState<string | null>(null)
   const [routeKey, setRouteKey] = useState(0)
   const [panelOpen, setPanelOpen] = useState(true)
+  const [venueModal, setVenueModal] = useState<Venue | null>(null)
+  const [infoModalOpen, setInfoModalOpen] = useState(false)
 
   const fromPosition = useMemo(
     () => (activeFromId ? getMapPosition(activeFromId) : null),
@@ -59,6 +63,18 @@ export default function MapNavigation() {
       <div className="map-navigation-top-bar">
         <h1 className="map-navigation-title">
           CU Nav <span className="map-navigation-beta">Beta</span>
+          <button 
+            className="map-navigation-info-btn" 
+            onClick={() => setInfoModalOpen(true)} 
+            title="Know more about the feature"
+            aria-label="More info about beta"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </button>
         </h1>
         
         <div className="map-navigation-route-card">
@@ -103,8 +119,25 @@ export default function MapNavigation() {
           fromPosition={fromPosition}
           toPosition={toPosition}
           routeKey={routeKey}
+          onVenueClick={setVenueModal}
         />
       </div>
+
+      {venueModal && (
+        <VenueDirections
+          venue={venueModal}
+          onClose={() => setVenueModal(null)}
+        />
+      )}
+
+      <ConfirmModal
+        isOpen={infoModalOpen}
+        title="About Map Navigation (Beta)"
+        message="This feature is currently very new, and many more professional additions will be made very soon for all visitors to navigate around our beautiful campus seamlessly."
+        confirmText="Got it"
+        onConfirm={() => setInfoModalOpen(false)}
+        onCancel={() => setInfoModalOpen(false)}
+      />
     </div>
   )
 }

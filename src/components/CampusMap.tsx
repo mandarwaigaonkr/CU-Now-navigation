@@ -3,6 +3,7 @@ import { AnimatePresence, m } from 'framer-motion'
 import toast from 'react-hot-toast'
 import campusMap from '../assets/campus-map.png'
 import { type MapPoint, type Waypoint, WAYPOINTS, VENUE_MAP_POSITIONS } from '../data/mapConfig'
+import VENUES, { type Venue } from '../data/venues'
 import { useMapPanZoom } from '../hooks/useMapPanZoom'
 import { findRoute, getRouteBounds, pointsToSvgPath } from '../utils/pathfinding'
 import {
@@ -24,6 +25,7 @@ interface CampusMapProps {
   fromPosition: MapPoint | null
   toPosition: MapPoint | null
   routeKey: number
+  onVenueClick?: (venue: Venue) => void
 }
 
 type EditorMode = 'add' | 'connect'
@@ -34,6 +36,7 @@ export default function CampusMap({
   fromPosition,
   toPosition,
   routeKey,
+  onVenueClick,
 }: CampusMapProps) {
   const viewportRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
@@ -333,6 +336,33 @@ export default function CampusMap({
                 </>
               )}
             </svg>
+
+            {/* Permanent Venue Pins */}
+            {!calibrationMode && !venueMode && Object.entries(VENUE_MAP_POSITIONS).map(([id, pos]) => {
+              const venue = VENUES.find(v => v.id === id)
+              if (!venue) return null
+              // Don't show pin if it's currently selected as start or destination
+              if (id === fromId || id === toId) return null
+
+              return (
+                <button
+                  key={`venue-pin-${id}`}
+                  className="campus-map__venue-btn"
+                  style={{ left: `${pos.x * 100}%`, top: `${pos.y * 100}%` }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onVenueClick?.(venue)
+                  }}
+                  title={venue.name}
+                  type="button"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </button>
+              )
+            })}
 
             {fromPosition && (
               <m.div
