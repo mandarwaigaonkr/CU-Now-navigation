@@ -57,25 +57,24 @@ export default function MapNavigation() {
   return (
     <div className="map-navigation-page">
       <div className="map-navigation-top-bar">
-        <h1 className="map-navigation-title">Campus Map</h1>
+        <h1 className="map-navigation-title">
+          CU Nav <span className="map-navigation-beta">Beta</span>
+        </h1>
         
-        <div className="map-navigation-inputs">
-          <div className="map-navigation-input-row">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: '#3B82F6' }}>
-              <circle cx="12" cy="12" r="6" />
-            </svg>
+        <div className="map-navigation-route-card">
+          <div className="map-navigation-timeline">
+             <div className="map-timeline-dot" />
+             <div className="map-timeline-line" />
+             <div className="map-timeline-square" />
+          </div>
+          <div className="map-navigation-fields">
             <CustomSelect
               value={fromId}
               options={LOCATION_OPTIONS}
               onChange={setFromId}
-              placeholder="Where are you?"
+              placeholder="Current location"
             />
-          </div>
-          <div className="map-navigation-input-row">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: '#EF4444' }}>
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
+            <div className="map-navigation-divider" />
             <CustomSelect
               value={toId}
               options={LOCATION_OPTIONS.filter(o => o.value !== fromId)}
@@ -87,9 +86,6 @@ export default function MapNavigation() {
 
         <div className="map-navigation-actions">
           <button type="button" className="map-navigation-btn map-navigation-btn--primary" onClick={handleNavigate}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <polygon points="3 11 22 2 13 21 11 13 3 11" />
-            </svg>
             Get Directions
           </button>
           {(activeFromId || activeToId || fromId || toId) && (

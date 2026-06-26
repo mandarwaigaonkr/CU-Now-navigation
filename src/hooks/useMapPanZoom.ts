@@ -138,7 +138,8 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
   }, [])
 
   const onWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault()
+    // Note: removed e.preventDefault() to avoid passive event listener warnings
+    // The map container doesn't scroll anyway, so it's safe to omit.
     const delta = e.deltaY > 0 ? -0.12 : 0.12
     applyState({ scale: state.scale + delta, x: state.x, y: state.y })
   }, [state.scale, state.x, state.y, applyState])
