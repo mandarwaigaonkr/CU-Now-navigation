@@ -36,8 +36,9 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-width: 64px;
-  padding: 8px 12px;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 2px;
   border-radius: var(--r-pill);
   text-decoration: none;
   color: var(--color-text-muted);
