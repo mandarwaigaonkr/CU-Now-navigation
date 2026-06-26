@@ -49,7 +49,7 @@ export default function CampusMap({
   const [exportCopied, setExportCopied] = useState(false)
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null)
 
-  const { zoomToBounds, ...panZoom } = useMapPanZoom(viewportRef)
+  const { frameRoute, ...panZoom } = useMapPanZoom(viewportRef)
 
   const activeWaypoints = calibrationMode ? editorWaypoints : WAYPOINTS
   const roadSegments = getRoadSegments(calibrationMode ? editorWaypoints : [])
@@ -62,12 +62,11 @@ export default function CampusMap({
     }
     const path = findRoute(fromPosition, toPosition, activeWaypoints)
     setRoutePath(path)
-    const bounds = getRouteBounds(path)
 
     requestAnimationFrame(() => {
-      zoomToBounds(bounds)
+      frameRoute(path)
     })
-  }, [routeKey, showRoute, fromPosition, toPosition, zoomToBounds, activeWaypoints])
+  }, [routeKey, showRoute, fromPosition, toPosition, frameRoute, activeWaypoints])
 
   const updateWaypoints = useCallback((next: Waypoint[]) => {
     setEditorWaypoints(next)
@@ -248,6 +247,7 @@ export default function CampusMap({
             className="campus-map__transform"
             style={{
               transform: `translate(calc(-50% + ${panZoom.x}px), calc(-50% + ${panZoom.y}px)) scale(${panZoom.scale})`,
+              transition: panZoom.isDragging ? 'none' : 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             <img

@@ -32,6 +32,7 @@ function clampScale(scale: number): number {
 
 export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null>) {
   const [state, setState] = useState<PanZoomState>({ scale: 1, x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
   const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null)
   const pinchRef = useRef<{ dist: number; scale: number; origX: number; origY: number } | null>(null)
   const metricsRef = useRef({ mapSize: 0, vpW: 0, vpH: 0 })
@@ -71,21 +72,37 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
     return () => ro.disconnect()
   }, [viewportRef, measure])
 
-  const zoomToBounds = useCallback((
-    bounds: { minX: number; maxX: number; minY: number; maxY: number },
-  ) => {
+  const frameRoute = useCallback((path: {x: number; y: number}[]) => {
     const { mapSize, vpW, vpH } = measure()
-    if (!mapSize) return
+    if (!mapSize || path.length < 2) return
 
-    const bw = bounds.maxX - bounds.minX
-    const bh = bounds.maxY - bounds.minY
-    const cx = (bounds.minX + bounds.maxX) / 2
-    const cy = (bounds.minY + bounds.maxY) / 2
+    const xs = path.map(p => p.x)
+    const ys = path.map(p => p.y)
+    
+    const minX = Math.min(...xs)
+    const maxX = Math.max(...xs)
+    const minY = Math.min(...ys)
+    const maxY = Math.max(...ys)
 
-    const padding = 0.12
-    const scaleX = 1 / (bw + padding)
-    const scaleY = 1 / (bh + padding)
-    const newScale = clampScale(Math.min(scaleX, scaleY) * 2.2)
+    const bw = maxX - minX
+    const bh = maxY - minY
+    const cx = (minX + maxX) / 2
+    const cy = (minY + maxY) / 2
+
+    // Prevent extreme zoom if start and end are practically the same point
+    const safeBw = Math.max(bw, 0.05)
+    const safeBh = Math.max(bh, 0.05)
+
+    // We want the route to fit within 75% of the screen (leaving a 12.5% padding on all sides)
+    const availableW = Math.max(vpW * 0.75, 100)
+    const availableH = Math.max(vpH * 0.75, 100)
+
+    // Calculate the scale required to fit the route's physical size into the available screen space
+    const scaleX = availableW / (safeBw * mapSize)
+    const scaleY = availableH / (safeBh * mapSize)
+    
+    // Take the smaller scale to ensure BOTH dimensions fit perfectly
+    const newScale = clampScale(Math.min(scaleX, scaleY))
 
     const x = (0.5 - cx) * mapSize * newScale
     const y = (0.5 - cy) * mapSize * newScale
@@ -101,6 +118,7 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
     if (e.button !== 0) return
     ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
     dragRef.current = { startX: e.clientX, startY: e.clientY, origX: state.x, origY: state.y }
+    setIsDragging(true)
   }, [state.x, state.y])
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
@@ -116,6 +134,7 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
 
   const onPointerUp = useCallback(() => {
     dragRef.current = null
+    setIsDragging(false)
   }, [])
 
   const onWheel = useCallback((e: React.WheelEvent) => {
@@ -125,6 +144,7 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
   }, [state.scale, state.x, state.y, applyState])
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
+    setIsDragging(true)
     if (e.touches.length === 2) {
       const dx = e.touches[0].clientX - e.touches[1].clientX
       const dy = e.touches[0].clientY - e.touches[1].clientY
@@ -153,6 +173,7 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
 
   const onTouchEnd = useCallback(() => {
     pinchRef.current = null
+    setIsDragging(false)
   }, [])
 
   const zoomIn = useCallback(() => {
@@ -165,7 +186,8 @@ export function useMapPanZoom(viewportRef: React.RefObject<HTMLDivElement | null
 
   return {
     ...state,
-    zoomToBounds,
+    isDragging,
+    frameRoute,
     resetView,
     zoomIn,
     zoomOut,

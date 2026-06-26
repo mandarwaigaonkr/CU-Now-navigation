@@ -72,36 +72,26 @@
   pointer-events: none;
 }
 
-/* Route line — GTA glowing path */
+/* Route line — sleek modern path */
 .campus-map__route-glow {
   fill: none;
-  stroke: url(#route-gradient);
-  stroke-width: 0.025;
+  stroke: #3B82F6;
+  stroke-width: 0.016;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.5;
+  opacity: 0.25;
 }
 
 .campus-map__route-line {
   fill: none;
-  stroke: url(#route-gradient);
-  stroke-width: 0.012;
+  stroke: #3B82F6;
+  stroke-width: 0.007;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .campus-map__route-dash {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.9);
-  stroke-width: 0.005;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 0.02 0.03;
-  animation: routeDash 1.2s linear infinite;
-}
-
-@keyframes routeDash {
-  to { stroke-dashoffset: -0.1; }
+  display: none;
 }
 
 .campus-map__waypoint-dot {
@@ -209,19 +199,18 @@
 /* Pins */
 .campus-map__pin {
   position: absolute;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -50%);
   z-index: 10;
   pointer-events: none;
 }
 
 .campus-map__pin-head {
   display: block;
-  width: 18px;
-  height: 18px;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .campus-map__pin--from .campus-map__pin-head {

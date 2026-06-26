@@ -61,7 +61,9 @@ export default function MapNavigation() {
         
         <div className="map-navigation-inputs">
           <div className="map-navigation-input-row">
-            <div className="map-navigation-dot map-navigation-dot--blue" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: '#3B82F6' }}>
+              <circle cx="12" cy="12" r="6" />
+            </svg>
             <CustomSelect
               value={fromId}
               options={LOCATION_OPTIONS}
@@ -70,7 +72,10 @@ export default function MapNavigation() {
             />
           </div>
           <div className="map-navigation-input-row">
-            <div className="map-navigation-dot map-navigation-dot--red" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: '#EF4444' }}>
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
             <CustomSelect
               value={toId}
               options={LOCATION_OPTIONS.filter(o => o.value !== fromId)}

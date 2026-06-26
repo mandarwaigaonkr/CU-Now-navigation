@@ -223,24 +223,26 @@ export const WAYPOINTS: Waypoint[] = [
 
 /** Venue pin positions keyed by venue id */
 export const VENUE_MAP_POSITIONS: Record<string, MapPoint> = {
-  'block-1-audi': { x: 0.477, y: 0.173 },
-  'block-2': { x: 0.609, y: 0.175 },
-  'open-audi': { x: 0.652, y: 0.175 },
-  'block-3-audi': { x: 0.698, y: 0.177 },
-  'block-4': { x: 0.762, y: 0.198 },
+  'main-gate': MAIN_GATE,
+  'block-1-audi': { x: 0.477, y: 0.22 },
+  'block-2': { x: 0.609, y: 0.22 },
+  'open-audi': { x: 0.652, y: 0.22 },
+  'block-3-audi': { x: 0.698, y: 0.22 },
+  'block-4': { x: 0.762, y: 0.22 },
   'block-5': { x: 0.694, y: 0.295 },
-  'block-6': { x: 0.872, y: 0.17 },
+  'block-6': { x: 0.872, y: 0.22 },
   'main-ground': { x: 0.496, y: 0.433 },
   'pu-block': { x: 0.622, y: 0.66 },
   'arch-block': { x: 0.81, y: 0.596 },
   'devdan-block': { x: 0.924, y: 0.497 },
   'car-parking': { x: 0.464, y: 0.354 },
   '2-wheeler-parking': { x: 0.436, y: 0.127 },
+  'amphitheater': { x: 0.61, y: 0.289 },
 }
 
 export function getMapPosition(locationId: string): MapPoint | null {
   if (locationId === 'main-gate') return MAIN_GATE
-  return VENUE_MAP_POSITIONS[locationId] ?? null
+  return VENUE_MAP_POSITIONS[locationId] || null
 }
 
 export function getWaypointById(id: string): Waypoint | undefined {
