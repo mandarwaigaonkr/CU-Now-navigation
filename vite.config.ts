@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons.svg', 'venues/*'],
       manifest: {
-        name: 'CU Now',
-        short_name: 'CU Now',
+        name: 'CU Nav',
+        short_name: 'CU Nav',
         description: 'Christ University Event Orientation App',
         theme_color: '#1E4DB7',
         background_color: '#ffffff',
