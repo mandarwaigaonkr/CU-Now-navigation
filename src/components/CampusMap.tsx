@@ -48,7 +48,7 @@ export default function CampusMap({
   }, [routeKey, showRoute, fromPosition, toPosition, frameRoute])
 
   const svgPath = pointsToSvgPath(routePath)
-  
+
   let startAngle = 0
   if (routePath.length > 1) {
     const dx = routePath[1].x - routePath[0].x
@@ -128,9 +128,8 @@ export default function CampusMap({
                   title={venue.name}
                   type="button"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="10" r="3"/>
+                  <svg width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="2" cy="2" r="2" fill="rgba(255,255,255,0.9)" />
                   </svg>
                 </button>
               )

@@ -8,7 +8,7 @@ const TAB_ORDER = ['/dashboard', '/navigation', '/schedule', '/about', '/profile
 export default function Layout() {
   const location = useLocation()
   const outlet = useOutlet()
-  
+
   const [animState, setAnimState] = useState({
     prevPath: location.pathname,
     direction: 0,
@@ -19,11 +19,11 @@ export default function Layout() {
   if (location.pathname !== animState.prevPath) {
     const currentIndex = TAB_ORDER.findIndex(path => location.pathname.startsWith(path))
     let newDirection = animState.direction
-    
+
     if (currentIndex !== -1 && animState.prevIndex !== -1 && currentIndex !== animState.prevIndex) {
       newDirection = currentIndex > animState.prevIndex ? 1 : -1
     }
-    
+
     setAnimState({
       prevPath: location.pathname,
       direction: newDirection,
@@ -80,8 +80,8 @@ export default function Layout() {
                 x: { type: 'spring', stiffness: 350, damping: 35 },
                 opacity: { duration: 0.2 }
               }}
-              style={{ 
-                overflowY: 'auto', 
+              style={{
+                overflowY: 'auto',
                 paddingBottom: '100px',
                 WebkitOverflowScrolling: 'touch',
                 backgroundColor: 'var(--color-bg-base)',
