@@ -5,7 +5,7 @@ import CustomSelect from '../../components/CustomSelect'
 import VENUES, { type Venue } from '../../data/venues'
 import { getMapPosition } from '../../data/mapConfig'
 import VenueDirections from '../../components/VenueDirections'
-import ConfirmModal from '../../components/ConfirmModal'
+import MapInfoSheet from '../../components/MapInfoSheet'
 import './MapNavigation.css'
 
 const LOCATION_OPTIONS = [
@@ -127,14 +127,9 @@ export default function MapNavigation() {
         />
       )}
 
-      <ConfirmModal
-        isOpen={infoModalOpen}
-        title="About Map Navigation (Beta)"
-        message="This feature is currently very new, and many more professional additions will be made very soon for all visitors to navigate around our beautiful campus seamlessly."
-        confirmText="Got it"
-        onConfirm={() => setInfoModalOpen(false)}
-        onCancel={() => setInfoModalOpen(false)}
-      />
+      {infoModalOpen && (
+        <MapInfoSheet onClose={() => setInfoModalOpen(false)} />
+      )}
     </div>
   )
 }
