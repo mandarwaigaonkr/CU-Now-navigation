@@ -111,7 +111,7 @@
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 16px;
+  padding: 16px 16px 120px 16px;
 }
 
 /* Event list */
@@ -248,7 +248,8 @@
 }
 
 .schedule-card__details--open {
-  max-height: 400px;
+  max-height: 1200px;
+  overflow-y: auto;
   opacity: 1;
   margin-top: 12px;
   padding-top: 12px;

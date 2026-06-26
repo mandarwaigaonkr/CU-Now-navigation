@@ -620,6 +620,12 @@
   outline: none;
 }
 
+.dark .admin-form .form-input:focus,
+.dark .admin-form .form-select:focus,
+.dark .admin-form .form-textarea:focus {
+  background: rgba(15, 20, 30, 0.9);
+}
+
 .admin-form .form-input--error,
 .admin-form .form-select--error,
 .admin-form .form-textarea--error {
