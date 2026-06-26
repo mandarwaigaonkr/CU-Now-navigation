@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import CampusMap from '../../components/CampusMap'
 import CustomSelect from '../../components/CustomSelect'
@@ -14,8 +15,17 @@ const LOCATION_OPTIONS = [
 ]
 
 export default function MapNavigation() {
+  const [searchParams] = useSearchParams()
+  
   const [fromId, setFromId] = useState<string | null>(null)
-  const [toId, setToId] = useState<string | null>(null)
+  const [toId, setToId] = useState<string | null>(searchParams.get('to'))
+
+  useEffect(() => {
+    const to = searchParams.get('to')
+    if (to && to !== toId) {
+      setToId(to)
+    }
+  }, [searchParams, toId])
   const [activeFromId, setActiveFromId] = useState<string | null>(null)
   const [activeToId, setActiveToId] = useState<string | null>(null)
   const [routeKey, setRouteKey] = useState(0)

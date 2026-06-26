@@ -3,6 +3,7 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useNavigate } from 'react-router-dom'
 import './VenueDirections.css'
 import { Venue } from '../data/venues'
 
@@ -13,6 +14,8 @@ interface VenueDirectionsProps {
 }
 
 export default function VenueDirections({ venue, directions, onClose }: VenueDirectionsProps) {
+  const navigate = useNavigate()
+
   useEffect(() => {
     // Lock body scroll to prevent app getting stuck
     document.body.style.overflow = 'hidden'
@@ -68,6 +71,20 @@ export default function VenueDirections({ venue, directions, onClose }: VenueDir
             <p className="venue-sheet__directions-text">{displayDirections}</p>
           </div>
         )}
+
+        <button 
+          className="venue-sheet__take-me-btn" 
+          onClick={() => {
+            onClose()
+            navigate(`/navigation?to=${venue.id}`)
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          Take me here
+        </button>
       </div>
     </div>
   )
