@@ -115,10 +115,7 @@ export function findRoute(
 
   route.push(end)
 
-  return route.filter((pt, i) => {
-    if (i === 0) return true
-    return dist(pt, route[i - 1]) > 0.005
-  })
+  return route
 }
 
 export function pointsToSvgPath(points: MapPoint[]): string {

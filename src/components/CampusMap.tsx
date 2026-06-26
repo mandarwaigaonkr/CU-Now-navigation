@@ -229,6 +229,13 @@ export default function CampusMap({
   }, [editorVenues])
 
   const svgPath = pointsToSvgPath(routePath)
+  
+  let startAngle = 0
+  if (routePath.length > 1) {
+    const dx = routePath[1].x - routePath[0].x
+    const dy = routePath[1].y - routePath[0].y
+    startAngle = (Math.atan2(dy, dx) * 180 / Math.PI) + 90
+  }
 
   return (
     <div className="campus-map">
@@ -330,27 +337,31 @@ export default function CampusMap({
             {fromPosition && (
               <m.div
                 key={`from-${fromId}`}
-                className="campus-map__pin campus-map__pin--from"
+                className="campus-map__pin"
                 style={{ left: `${fromPosition.x * 100}%`, top: `${fromPosition.y * 100}%` }}
-                initial={{ scale: 0, y: -20 }}
-                animate={{ scale: 1, y: 0 }}
+                initial={{ scale: 0, x: "-50%", y: "-50%", rotate: startAngle - 45 }}
+                animate={{ scale: 1 / panZoom.scale, x: "-50%", y: "-50%", rotate: startAngle }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               >
-                <span className="campus-map__pin-head" />
-                <span className="campus-map__pin-pulse" />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="campus-map__pin-svg">
+                  <path d="M12 2L3 20L12 15L21 20L12 2Z" fill="#10B981" stroke="rgba(0,0,0,0.8)" strokeWidth="2" strokeLinejoin="round" />
+                </svg>
+                <span className="campus-map__pin-pulse campus-map__pin-pulse--green" />
               </m.div>
             )}
 
             {toPosition && (
               <m.div
                 key={`to-${toId}`}
-                className="campus-map__pin campus-map__pin--to"
+                className="campus-map__pin"
                 style={{ left: `${toPosition.x * 100}%`, top: `${toPosition.y * 100}%` }}
-                initial={{ scale: 0, y: -20 }}
-                animate={{ scale: 1, y: 0 }}
+                initial={{ scale: 0, x: "-50%", y: "-50%" }}
+                animate={{ scale: 1 / panZoom.scale, x: "-50%", y: "-50%" }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
               >
-                <span className="campus-map__pin-head" />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="campus-map__pin-svg">
+                  <polygon points="12,2 22,12 12,22 2,12" fill="#EF4444" stroke="rgba(0,0,0,0.8)" strokeWidth="2" strokeLinejoin="round" />
+                </svg>
                 <span className="campus-map__pin-pulse campus-map__pin-pulse--red" />
               </m.div>
             )}
