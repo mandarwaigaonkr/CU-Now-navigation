@@ -14,7 +14,7 @@ const VENUES: Venue[] = [
   // ─── Numbered Blocks ───
   {
     id: 'block-1-audi',
-    name: 'Block 1',
+    name: '1st Block',
     block: '1st Block',
     image: '/venues/first_block.jpeg',
     defaultDirections:
@@ -22,14 +22,14 @@ const VENUES: Venue[] = [
   },
   {
     id: 'block-2',
-    name: 'Block 2',
+    name: '2nd Block',
     block: '2nd Block',
     image: '/venues/second_block.jpg',
     defaultDirections: 'Located along the main road of the campus, near the open auditorium.',
   },
   {
     id: 'block-3-audi',
-    name: 'Block 3',
+    name: '3rd Block',
     block: '3rd Block',
     image: '/venues/third_block.jpg',
     defaultDirections:
@@ -37,14 +37,14 @@ const VENUES: Venue[] = [
   },
   {
     id: 'block-4',
-    name: 'Block 4',
+    name: '4th Block',
     block: '4th Block',
     image: '/venues/fourth_block.jpg',
     defaultDirections: 'Follow the main road towards the central campus area. Block 4 houses the library and canteens.',
   },
   {
     id: 'block-5',
-    name: 'Block 5 (Center OF Execellence)',
+    name: '5th Block',
     block: '5th Block',
     image: '/venues/fifth_block.jpg',
     defaultDirections: 'Pass Block 1, 2, and 3. The 5th Block is further ahead on the left side.',
