@@ -386,7 +386,7 @@ export default function Login() {
         )}
 
         {/* ---- SECURITY BADGE ---- */}
-        <a href="https://drive.google.com/file/d/1800aQog5PJE6LwwWvFE0_2mk0nEyoVIl/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="login-security login-animate-in login-animate-in--security">
+        <a href="https://dev-society-website.vercel.app/legal/privacy" target="_blank" rel="noopener noreferrer" className="login-security login-animate-in login-animate-in--security">
           <ShieldCheckIcon className="login-security__icon" />
           <span className="login-security__text">
             Secure platform. Click to view Privacy Policy.

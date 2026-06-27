@@ -150,6 +150,15 @@ export default function Profile() {
           </button>
         </div>
 
+        <a 
+          href="https://dev-society-website.vercel.app/legal/privacy" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="profile-version"
+          style={{ textDecoration: 'underline', display: 'block', marginBottom: '8px' }}
+        >
+          View Privacy Policy
+        </a>
         <p className="profile-version">By, Developers Society of Christ University</p>
       </div>
 
