@@ -109,7 +109,7 @@ export default function About() {
     const imageFallbacks: Record<string, string> = {
       '1st Block': '/venues/first_block.jpeg',
       '4th Block': '/venues/fourth_block.jpg',
-      'Main Ground': '/venues/main ground.jfif',
+      'Main Ground': '/venues/main_ground.jfif',
       'Basketball Court': '/venues/b_court.jfif',
       'Car Parking': '/venues/parking_car.jfif',
       'Bike Parking': '/venues/bike_parking.jfif'
